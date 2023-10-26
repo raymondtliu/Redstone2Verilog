@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "redstone2verilog",
+	"version": "${version}",
+	"name": "Redstone to Verilog",
+	"description": "A mod to convert combinational logic circuits from Minecraft redstone into Verilog",
+	"authors": [
+		"Raymond Liu"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/redstone2verilog/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.raymond.redstone2verilog.RedstoneToVerilog"
+		],
+		"client": [
+			"net.raymond.redstone2verilog.RedstoneToVerilogClient"
+		],
+		"fabric-datagen": [
+			"net.raymond.redstone2verilog.RedstoneToVerilogDataGenerator"
+		]
+	},
+	"mixins": [
+		"redstone2verilog.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.24",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
