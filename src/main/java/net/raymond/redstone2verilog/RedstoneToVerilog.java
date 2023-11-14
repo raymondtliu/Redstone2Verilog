@@ -27,6 +27,8 @@ public class RedstoneToVerilog implements ModInitializer {
 
 		ModBlocks.registerModBlocks();
 
+		ModRegistries.registerModRegistries();
+
 
 	}
 }
