@@ -1,3 +1,7 @@
 {
-  "item.redstone2verilog.export_tool": "Export Tool"
+  "item.redstone2verilog.export_tool": "Export Tool",
+
+  "block.redstone2verilog.verilog_input_block": "Verilog Input Block",
+
+  "itemgroup.verilog_group": "Redstone to Verilog"
 }
