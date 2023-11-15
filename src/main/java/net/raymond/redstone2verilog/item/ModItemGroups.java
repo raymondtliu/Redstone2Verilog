@@ -20,6 +20,7 @@ public class ModItemGroups {
                         entries.add(Items.REDSTONE_BLOCK);
                         entries.add(ModItems.EXPORT_TOOL);
                         entries.add(ModBlocks.VERILOG_INPUT_BLOCK);
+                        entries.add(ModBlocks.VERILOG_OUTPUT_BLOCK);
                     }).build());
 
 

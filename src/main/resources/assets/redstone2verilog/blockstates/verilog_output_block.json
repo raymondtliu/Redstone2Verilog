@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "redstone2verilog:block/verilog_output_block"
+    }
+  }
+}

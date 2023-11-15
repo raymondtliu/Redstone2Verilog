@@ -4,7 +4,9 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.raymond.redstone2verilog.block.ModBlocks;
+import net.raymond.redstone2verilog.event.BlockPlaceHandler;
 import net.raymond.redstone2verilog.item.ModItemGroups;
 import net.raymond.redstone2verilog.item.ModItems;
 import net.raymond.redstone2verilog.util.ModRegistries;
@@ -28,6 +30,8 @@ public class RedstoneToVerilog implements ModInitializer {
 		ModBlocks.registerModBlocks();
 
 		ModRegistries.registerModRegistries();
+
+		UseBlockCallback.EVENT.register(new BlockPlaceHandler());
 
 
 	}

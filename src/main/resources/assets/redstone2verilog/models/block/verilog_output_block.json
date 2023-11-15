@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "redstone2verilog:block/verilog_output_block"
+  }
+}
