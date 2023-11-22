@@ -21,7 +21,7 @@ public class ModItemGroups {
                         entries.add(ModItems.EXPORT_TOOL);
                         entries.add(ModBlocks.VERILOG_INPUT_BLOCK);
                         entries.add(ModBlocks.VERILOG_OUTPUT_BLOCK);
-                        entries.add(ModBlocks.AND_GATE_BLOCK);
+                        entries.add(ModBlocks.NOT_GATE_BLOCK);
                     }).build());
 
 
