@@ -23,6 +23,7 @@ public final class ExtractRedstoneCommand {
     }
 
     private static int run(CommandContext<ServerCommandSource> context) {
+        // sends a message to the player
         context.getSource().sendMessage(Text.literal("Hello, world!"));
         //checkVerilogBlocks(World., ModBlocks.VERILOG_INPUT_BLOCK);
         return 0;
@@ -35,6 +36,7 @@ public final class ExtractRedstoneCommand {
         int player_ypos = (int) player.getY();
         int player_zpos = (int) player.getZ();
 
+        // loop through nearby blocks
         for (int x = player_xpos-100; x < player_xpos+100; x++) {
             for (int y = player_ypos-100; y < player_ypos+100; y++) {
                 for (int z = player_zpos-100; z < player_zpos+100; z++) {
