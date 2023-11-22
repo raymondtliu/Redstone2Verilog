@@ -20,17 +20,11 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final BooleanProperty INPUT_POWERED = BooleanProperty.of("input_powered");
 //    public static final BooleanProperty RIGHT_INPUT_POWERED = BooleanProperty.of("right_input_powered");
+    public abstract int gateLogic(World world, BlockPos pos, BlockState state);
 
     protected AbstractLogicGateBlock(Settings settings) {
         super(settings);
         setDefaultState(getDefaultState().with(INPUT_POWERED, false).with(FACING, Direction.NORTH));
-    }
-
-
-
-    @Override
-    protected boolean getSideInputFromGatesOnly() {
-        return super.getSideInputFromGatesOnly();
     }
 
     @Override
@@ -43,16 +37,5 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
         builder.add(POWERED);
         builder.add(FACING);
     }
-
-
-
-    protected int getFrontInputLevel(BlockState state, WorldView world, BlockPos pos)
-    {
-        Direction frontDir = state.get(FACING);
-        BlockPos frontPos = pos.offset(frontDir);
-        return 10;
-    }
-
-    public abstract boolean getOutputRedstonePower(BlockState thisBlockState, World world, BlockPos pos);
 
 }

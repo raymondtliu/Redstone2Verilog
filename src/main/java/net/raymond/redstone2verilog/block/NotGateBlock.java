@@ -1,6 +1,7 @@
 package net.raymond.redstone2verilog.block;
 
 import net.minecraft.block.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.BooleanProperty;
@@ -12,14 +13,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public final class NotGateBlock extends AbstractLogicGateBlock {
-
-
     public NotGateBlock(Settings settings) {
         super(settings);
     }
-
-
-
 
 //    @Override
 //    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -46,34 +42,32 @@ public final class NotGateBlock extends AbstractLogicGateBlock {
         return true;
     }
 
+//    @Override
+//    protected int getPower(World world, BlockPos pos, BlockState state) {
+//        Direction direction = state.get(FACING);
+//        BlockPos blockPos = pos.offset(direction);
+//        super.getPower()
+//
+//        return world.getEmittedRedstonePower(blockPos, direction);
+//    }
+
+
+    @Override
+    public int gateLogic(World world, BlockPos pos, BlockState state) {
+        // invert front signal
+        return (getPower(world, pos, state) > 0) ? 0:15;
+    }
+
     // Sets this block can emit power level of 15 (max)
     @Override
     public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
         if (direction != state.get(FACING)) {
             return super.getWeakRedstonePower(state, world, pos, direction);
         }
-        return 15;
+
+        return !state.get(POWERED) ? 15:0;
     }
 
-    @Override
-    public boolean getOutputRedstonePower(BlockState state, World world, BlockPos pos)
-    {
-        return true;
-    }
 
-//    private int calculateLogic(World world, BlockPos pos, BlockState state) {
-//        int i = this.getPower(world, pos, state);
-//        if (i == 0) {
-//            return 0;
-//        }
-//        int j = this.getMaxInputLevelSides(world, pos, state);
-//        if (j > i) {
-//            return 0;
-//        }
-//        if (state.get(MODE) == ComparatorMode.SUBTRACT) {
-//            return i - j;
-//        }
-//        return i;
-//    }
 
 }
