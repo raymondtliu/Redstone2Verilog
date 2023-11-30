@@ -21,6 +21,7 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     public static final BooleanProperty INPUT_POWERED = BooleanProperty.of("input_powered");
 //    public static final BooleanProperty RIGHT_INPUT_POWERED = BooleanProperty.of("right_input_powered");
     public abstract int gateLogic(World world, BlockPos pos, BlockState state);
+    public String operator_symbol;
 
     protected AbstractLogicGateBlock(Settings settings) {
         super(settings);

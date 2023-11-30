@@ -13,7 +13,7 @@ import net.raymond.redstone2verilog.RedstoneToVerilog;
 
 public class ModBlocks {
     public static final Block VERILOG_INPUT_BLOCK = registerBlock("verilog_input_block",
-            new Block(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
+            new VerilogInputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block VERILOG_OUTPUT_BLOCK = registerBlock("verilog_output_block",
             new Block(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block NOT_GATE_BLOCK = registerBlock("not_gate_block",

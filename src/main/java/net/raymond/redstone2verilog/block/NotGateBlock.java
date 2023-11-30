@@ -26,14 +26,13 @@ public final class NotGateBlock extends AbstractLogicGateBlock {
 //        return ActionResult.PASS;
 //    }
 
+
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-
-            if (state.isOf(ModBlocks.NOT_GATE_BLOCK)) {
-                System.out.println("i placed an NOT gate");
-            }
-
+        if (state.isOf(ModBlocks.NOT_GATE_BLOCK)) {
+            System.out.println("i placed an NOT gate");
+        }
     }
 
     // States this block can emit power
@@ -41,15 +40,6 @@ public final class NotGateBlock extends AbstractLogicGateBlock {
     public boolean emitsRedstonePower(BlockState state) {
         return true;
     }
-
-//    @Override
-//    protected int getPower(World world, BlockPos pos, BlockState state) {
-//        Direction direction = state.get(FACING);
-//        BlockPos blockPos = pos.offset(direction);
-//        super.getPower()
-//
-//        return world.getEmittedRedstonePower(blockPos, direction);
-//    }
 
 
     @Override
