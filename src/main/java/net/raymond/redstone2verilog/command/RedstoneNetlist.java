@@ -21,4 +21,12 @@ public class RedstoneNetlist {
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder full_netlist = new StringBuilder();
+        for (RedstoneNet net : this.redstone_netlist) {
+            full_netlist.append(net).append("\n");
+        }
+        return full_netlist.toString();
+    }
 }

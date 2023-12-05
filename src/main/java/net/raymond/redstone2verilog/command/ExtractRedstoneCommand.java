@@ -29,7 +29,7 @@ public final class ExtractRedstoneCommand {
         ServerWorld world = context.getSource().getWorld();
         RedstoneNetlist extracted_netlist = extractRedstoneNetlist(world);
 
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(extracted_netlist.getRedstone_netlist().get(0).getStarting_block().getName().getString()));
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(extracted_netlist.toString()));
 
         return 0;
     }
@@ -88,29 +88,6 @@ public final class ExtractRedstoneCommand {
 
         RedstoneNet net = new RedstoneNet(startBlock, startPos, endingBlock, currentPos);
         netlist.addRedstoneNet(net);
-
-//        while (true) {
-//            // searches for redstone wire
-//
-//            // searches for any verilog blocks
-//            if (facingBlock == ModBlocks.NOT_GATE_BLOCK | facingBlock == ModBlocks.VERILOG_OUTPUT_BLOCK) {
-//                endingBlock = facingBlock;
-//                player.sendMessage(Text.literal("Found a " + facingBlock.getName().getString() + " block at (" + startPos.toString() + ")" ));
-//
-//                startPos = startPos.offset(facingDirection);
-//                facingBlock = world.getBlockState(startPos).getBlock();
-//                continue;
-//            }
-//
-//
-//            // searches for output block
-//            if (facingBlock == ModBlocks.VERILOG_OUTPUT_BLOCK) {
-//                player.sendMessage(Text.literal("Found a " + facingBlock.getName().getString() + " block at (" + startPos.toString() + ")" ));
-//            }
-//
-//            break;
-//        }
-
 
         return 1;
     }

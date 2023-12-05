@@ -31,4 +31,16 @@ public class RedstoneNet {
         this.endPos = endPos;
     }
 
+    @Override
+    public String toString() {
+        return  starting_block.getName().getString() + " " +
+                finishing_block.getName().getString() + " " +
+                startPos.getX() + "," +
+                startPos.getY() + "," +
+                startPos.getZ() + " " +
+                endPos.getX() + "," +
+                endPos.getY() + "," +
+                endPos.getZ()
+                ;
+    }
 }
