@@ -4,6 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RedstoneNetlist {
+    public void setInput_signals(List<InputVerilogPort> input_signals) {
+        this.input_signals = input_signals;
+    }
+
+    public void setOutput_signals(List<OutputVerilogPort> output_signals) {
+        this.output_signals = output_signals;
+    }
+
+    public List<InputVerilogPort> getInput_signals() {
+        return input_signals;
+    }
+
+    public List<OutputVerilogPort> getOutput_signals() {
+        return output_signals;
+    }
+
+    private List<InputVerilogPort> input_signals;
+    private List<OutputVerilogPort> output_signals;
+
     public List<RedstoneNet> getRedstone_netlist() {
         return redstone_netlist;
     }
@@ -16,6 +35,9 @@ public class RedstoneNetlist {
     public RedstoneNetlist() {
     }
 
+    public int getNetlistLength() {
+        return this.redstone_netlist.size();
+    }
     public void addRedstoneNet(RedstoneNet net) {
         this.redstone_netlist.add(net);
     }
