@@ -16,6 +16,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.raymond.redstone2verilog.block.ModBlocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public final class ExtractRedstoneCommand {
     // registers command to
@@ -31,6 +34,9 @@ public final class ExtractRedstoneCommand {
 
         MinecraftClient.getInstance().player.sendMessage(Text.literal(extracted_netlist.toString()));
 
+        VerilogNetlist generated_netlist = extracted_netlist.generateVerilogNetlist();
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(generated_netlist.toString()));
+
         return 0;
     }
 
@@ -45,17 +51,26 @@ public final class ExtractRedstoneCommand {
         int player_zpos = (int) player.getZ();
 
         int search_range = 100;
+
+        List<InputVerilogPort> input_blocks = new ArrayList<>();
+        List<OutputVerilogPort> output_blocks = new ArrayList<>();
+
         // loop through nearby blocks
         for (int x = player_xpos - search_range; x < player_xpos + search_range; x++) {
             for (int y = player_ypos - search_range; y < player_ypos + search_range; y++) {
                 for (int z = player_zpos - search_range; z < player_zpos + search_range; z++) {
                     //check for verilog input
-                    checkRedstoneNet(world, ModBlocks.VERILOG_INPUT_BLOCK, new BlockPos(x, y, z), extracted_netlist, player);
+                    input_blocks.add(new InputVerilogPort(new BlockPos(x, y, z)));
                 }
             }
         }
-        if (extracted_netlist.getLastRedstoneNet().getFinishing_block() == ModBlocks.NOT_GATE_BLOCK) {
-            checkRedstoneNet(world, ModBlocks.NOT_GATE_BLOCK, extracted_netlist.getLastRedstoneNet().getEndPos(), extracted_netlist, player);
+
+        for (InputVerilogPort input_block : input_blocks) {
+            checkRedstoneNet(world, ModBlocks.VERILOG_INPUT_BLOCK, input_block.getPort_pos(), extracted_netlist, player);
+
+        }
+        if (extracted_netlist.getLastRedstoneNet().finishing_block() == ModBlocks.NOT_GATE_BLOCK) {
+            checkRedstoneNet(world, ModBlocks.NOT_GATE_BLOCK, extracted_netlist.getLastRedstoneNet().endPos(), extracted_netlist, player);
         }
         return extracted_netlist;
     }
@@ -68,7 +83,6 @@ public final class ExtractRedstoneCommand {
             return 0;
         }
 
-        player.sendMessage(Text.literal("Found a " + startBlock.getName().getString() + " block at (" + startPos.toString() + ")" ));
 
         Direction facingDirection = Direction.NORTH;
         BlockPos currentPos = startPos.offset(facingDirection);
@@ -77,14 +91,12 @@ public final class ExtractRedstoneCommand {
         Block endingBlock;
 
         while (facingBlock == Blocks.REDSTONE_WIRE) {
-            player.sendMessage(Text.literal("Found a " + facingBlock.getName().getString() + " block at (" + currentPos.toString() + ")" ));
 
             currentPos = currentPos.offset(facingDirection);
             facingBlock = world.getBlockState(currentPos).getBlock();
         }
 
         endingBlock = facingBlock;
-        player.sendMessage(Text.literal("ending block" + endingBlock.getName().getString() + " block at (" + currentPos.toString() + ")" ));
 
         RedstoneNet net = new RedstoneNet(startBlock, startPos, endingBlock, currentPos);
         netlist.addRedstoneNet(net);

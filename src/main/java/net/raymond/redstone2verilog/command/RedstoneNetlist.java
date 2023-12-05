@@ -29,4 +29,9 @@ public class RedstoneNetlist {
         }
         return full_netlist.toString();
     }
+
+    public VerilogNetlist generateVerilogNetlist() {
+
+        return new VerilogNetlist(this);
+    }
 }
