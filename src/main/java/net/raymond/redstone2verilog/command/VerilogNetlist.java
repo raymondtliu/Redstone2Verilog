@@ -70,19 +70,29 @@ public class VerilogNetlist {
         header.append(module_name);
         header.append("(\n");
 
-
-        for (int i = 0; i <= this.redstone_netlist.getInput_signals().size(); i++) {
-            header.append("\tinput input").append(i).append(",\n");
+        for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
+            if (net.starting_block() == ModBlocks.VERILOG_INPUT_BLOCK) {
+                header.append("\tinput ").append(net.net_name()).append(",\n");
+            }
+        }
+        for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
+            if (net.finishing_block() == ModBlocks.VERILOG_OUTPUT_BLOCK) {
+                header.append("\toutput ").append(net.net_name()).append(",\n");
+            }
         }
 
-        for (int i = 0; i <= this.redstone_netlist.getOutput_signals().size(); i++) {
-            header.append("\toutput output").append(i).append(",\n");
-        }
+//        for (int i = 0; i <= this.redstone_netlist.getInput_signals().size(); i++) {
+//            header.append("\tinput input").append(i).append(",\n");
+//        }
+//
+//        for (int i = 0; i <= this.redstone_netlist.getOutput_signals().size(); i++) {
+//            header.append("\toutput output").append(i).append(",\n");
+//        }
 
-        header.delete(header.length() - 2, header.length() -1);
+        header.delete(header.length() - 2, header.length());
 
 
-        header.append(");\n");
+        header.append(");\n\n");
 
         return header.toString();
     }
