@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.raymond.redstone2verilog.RedstoneToVerilog;
 
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        System.out.println("Placed block: " + state.getBlock().getName().getString());
+        RedstoneToVerilog.LOGGER.info("Placed block: " + state.getBlock().getName().getString());
     }
 
     // States this block can emit power

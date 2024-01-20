@@ -18,11 +18,15 @@ public class VerilogRedstoneItemGroups {
                     .icon(() -> new ItemStack(VerilogRedstoneItems.EXPORT_TOOL)).entries((displayContext, entries) -> {
                         entries.add(Items.REDSTONE);
                         entries.add(Items.REDSTONE_BLOCK);
+
                         entries.add(VerilogRedstoneItems.EXPORT_TOOL);
+
                         entries.add(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK);
                         entries.add(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK);
-                        entries.add(VerilogRedstoneBlocks.NOT_GATE_BLOCK);
-                        entries.add(VerilogRedstoneBlocks.AND_GATE_BLOCK);
+
+                        entries.add(VerilogRedstoneBlocks.GATE_NOT_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_AND_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_OR_BLOCK);
                     }).build());
 
 

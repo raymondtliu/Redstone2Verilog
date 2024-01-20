@@ -37,7 +37,7 @@ public class VerilogNetlist {
         StringBuilder logic = new StringBuilder();
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
-            if (net.finishing_block() == VerilogRedstoneBlocks.NOT_GATE_BLOCK) {
+            if (net.finishing_block() == VerilogRedstoneBlocks.GATE_NOT_BLOCK) {
                 logic.append("\t").append("not(");
                 logic.append(net.net_name()).append(", ");
 

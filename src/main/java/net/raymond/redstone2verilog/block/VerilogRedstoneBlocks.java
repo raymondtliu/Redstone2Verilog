@@ -15,10 +15,12 @@ public class VerilogRedstoneBlocks {
             new VerilogInputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block VERILOG_OUTPUT_BLOCK = registerBlock("verilog_output_block",
             new VerilogOutputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
-    public static final Block NOT_GATE_BLOCK = registerBlock("not_gate_block",
+    public static final Block GATE_NOT_BLOCK = registerBlock("gate_not_block",
             new GateNotBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
-    public static final Block AND_GATE_BLOCK = registerBlock("and_gate_block",
+    public static final Block GATE_AND_BLOCK = registerBlock("gate_and_block",
             new GateAndBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+    public static final Block GATE_OR_BLOCK = registerBlock("gate_or_block",
+            new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

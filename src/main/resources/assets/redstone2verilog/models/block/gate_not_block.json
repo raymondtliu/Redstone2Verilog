@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "redstone2verilog:block/and_gate_block"
+    "all": "redstone2verilog:block/gate_not_block"
   }
 }
