@@ -5,7 +5,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public final class NotGateBlock extends AbstractLogicGateBlock {
@@ -30,29 +29,11 @@ public final class NotGateBlock extends AbstractLogicGateBlock {
         }
     }
 
-    // States this block can emit power
-    @Override
-    public boolean emitsRedstonePower(BlockState state) {
-        return true;
-    }
-
-
     @Override
     public int gateLogic(World world, BlockPos pos, BlockState state) {
-        // invert front signal
-        return (getPower(world, pos, state) > 0) ? 0:15;
+        // invert input signal
+        boolean front_powered = getDirectionalPower(world, pos, state.get(FACING)) > 0;
+
+        return front_powered ? 0:15;
     }
-
-    // Sets this block can emit power level of 15 (max)
-    @Override
-    public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        if (direction != state.get(FACING)) {
-            return super.getWeakRedstonePower(state, world, pos, direction);
-        }
-
-        return !state.get(POWERED) ? 15:0;
-    }
-
-
-
 }
