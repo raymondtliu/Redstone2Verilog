@@ -4,8 +4,8 @@ import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public final class GateBlockNot extends AbstractLogicGateBlock {
-    public GateBlockNot(Settings settings) {
+public final class GateNotBlock extends AbstractLogicGateBlock {
+    public GateNotBlock(Settings settings) {
         super(settings);
     }
     @Override
