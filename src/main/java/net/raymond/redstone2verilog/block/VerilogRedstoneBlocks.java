@@ -11,13 +11,15 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
-public class ModBlocks {
+public class VerilogRedstoneBlocks {
     public static final Block VERILOG_INPUT_BLOCK = registerBlock("verilog_input_block",
             new VerilogInputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block VERILOG_OUTPUT_BLOCK = registerBlock("verilog_output_block",
             new Block(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block NOT_GATE_BLOCK = registerBlock("not_gate_block",
             new NotGateBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+    public static final Block AND_GATE_BLOCK = registerBlock("and_gate_block",
+            new AndGateBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

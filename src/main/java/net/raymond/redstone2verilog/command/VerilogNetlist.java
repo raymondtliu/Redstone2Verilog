@@ -1,11 +1,10 @@
 package net.raymond.redstone2verilog.command;
 
-import net.raymond.redstone2verilog.block.ModBlocks;
+import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 public class VerilogNetlist {
 
@@ -38,7 +37,7 @@ public class VerilogNetlist {
         StringBuilder logic = new StringBuilder();
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
-            if (net.finishing_block() == ModBlocks.NOT_GATE_BLOCK) {
+            if (net.finishing_block() == VerilogRedstoneBlocks.NOT_GATE_BLOCK) {
                 logic.append("\t").append("not(");
                 logic.append(net.net_name()).append(", ");
 
@@ -71,12 +70,12 @@ public class VerilogNetlist {
         header.append("(\n");
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
-            if (net.starting_block() == ModBlocks.VERILOG_INPUT_BLOCK) {
+            if (net.starting_block() == VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) {
                 header.append("\tinput ").append(net.net_name()).append(",\n");
             }
         }
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
-            if (net.finishing_block() == ModBlocks.VERILOG_OUTPUT_BLOCK) {
+            if (net.finishing_block() == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
                 header.append("\toutput ").append(net.net_name()).append(",\n");
             }
         }

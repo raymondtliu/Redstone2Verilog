@@ -4,6 +4,7 @@
   "block.redstone2verilog.verilog_input_block": "Verilog Input Block",
   "block.redstone2verilog.verilog_output_block": "Verilog Output Block",
   "block.redstone2verilog.not_gate_block": "NOT Gate Block",
+  "block.redstone2verilog.and_gate_block": "AND Gate Block",
 
   "itemgroup.verilog_group": "Redstone to Verilog"
 }

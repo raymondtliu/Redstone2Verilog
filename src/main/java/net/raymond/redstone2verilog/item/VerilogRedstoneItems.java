@@ -10,7 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
-public class ModItems {
+public class VerilogRedstoneItems {
     public static final Item EXPORT_TOOL = registerItem("export_tool", new Item(new FabricItemSettings()));
 
     private static void addItemsToIngredientToItemGroup(FabricItemGroupEntries entries) {
@@ -24,6 +24,6 @@ public class ModItems {
     public static void registerModItems() {
         RedstoneToVerilog.LOGGER.info("Registering Mod Items for " + RedstoneToVerilog.MOD_ID);
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::addItemsToIngredientToItemGroup);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(VerilogRedstoneItems::addItemsToIngredientToItemGroup);
     }
 }

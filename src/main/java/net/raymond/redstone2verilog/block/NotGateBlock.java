@@ -1,16 +1,12 @@
 package net.raymond.redstone2verilog.block;
 
 import net.minecraft.block.*;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public final class NotGateBlock extends AbstractLogicGateBlock {
     public NotGateBlock(Settings settings) {
@@ -26,11 +22,10 @@ public final class NotGateBlock extends AbstractLogicGateBlock {
 //        return ActionResult.PASS;
 //    }
 
-
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        if (state.isOf(ModBlocks.NOT_GATE_BLOCK)) {
+        if (state.isOf(VerilogRedstoneBlocks.NOT_GATE_BLOCK)) {
             System.out.println("i placed an NOT gate");
         }
     }

@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 import net.raymond.redstone2verilog.command.ExtractRedstoneCommand;
 
-public class ModRegistries {
+public class VerilogRedstoneRegistries {
     public static void registerModRegistries() {
         registerCommands();
     }

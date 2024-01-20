@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.raymond.redstone2verilog.block.ModBlocks;
+import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public final class ExtractRedstoneCommand {
             for (int y = player_ypos - search_range; y < player_ypos + search_range; y++) {
                 for (int z = player_zpos - search_range; z < player_zpos + search_range; z++) {
                     //check for verilog input
-                    if (world.getBlockState(new BlockPos(x, y, z)).getBlock() == ModBlocks.VERILOG_INPUT_BLOCK) {
+                    if (world.getBlockState(new BlockPos(x, y, z)).getBlock() == VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) {
                         input_blocks.add(new InputVerilogPort(new BlockPos(x, y, z)));
                     }
                 }
@@ -79,15 +79,15 @@ public final class ExtractRedstoneCommand {
 
         for (InputVerilogPort input_block : input_blocks) {
 
-            foundBlocks = checkRedstoneNet(world, ModBlocks.VERILOG_INPUT_BLOCK, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player);
+            foundBlocks = checkRedstoneNet(world, VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player);
         }
 
         assert foundBlocks != null;
         for (RedstoneNet net : foundBlocks.getRedstone_netlist()) {
-            if (net.finishing_block() == ModBlocks.NOT_GATE_BLOCK) {
+            if (net.finishing_block() == VerilogRedstoneBlocks.NOT_GATE_BLOCK) {
                 player.sendMessage(Text.of("found finishing block" + net.finishing_block().toString()));
 
-                checkRedstoneNet(world, ModBlocks.NOT_GATE_BLOCK, new directionalBlockPos(net.endPos(), Direction.SOUTH), extracted_netlist, player);
+                checkRedstoneNet(world, VerilogRedstoneBlocks.NOT_GATE_BLOCK, new directionalBlockPos(net.endPos(), Direction.SOUTH), extracted_netlist, player);
             }
         }
 
@@ -118,7 +118,7 @@ public final class ExtractRedstoneCommand {
 
         Direction facingDirection = Direction.NORTH;
         Direction[] directionList = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-        Block[] modBlocksList = {ModBlocks.VERILOG_OUTPUT_BLOCK, ModBlocks.NOT_GATE_BLOCK};
+        Block[] modBlocksList = {VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK, VerilogRedstoneBlocks.NOT_GATE_BLOCK};
 
         while (!currentPosList.isEmpty()) {
             for (directionalBlockPos pos:currentPosList){
@@ -171,18 +171,18 @@ public final class ExtractRedstoneCommand {
 
     @Nullable
     private static String getPort(World world, PlayerEntity player, Block facingBlock, BlockPos currentPos, Direction facingDirection) {
-        List<Block> mod_blocks_list = List.of(ModBlocks.NOT_GATE_BLOCK,
-                ModBlocks.VERILOG_INPUT_BLOCK,
-                ModBlocks.VERILOG_OUTPUT_BLOCK);
+        List<Block> mod_blocks_list = List.of(VerilogRedstoneBlocks.NOT_GATE_BLOCK,
+                VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK,
+                VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK);
 
         if (!mod_blocks_list.contains(facingBlock)) {
             return null;
         }
 
-        if (facingBlock == ModBlocks.VERILOG_INPUT_BLOCK) {
+        if (facingBlock == VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) {
             return "output";
         }
-        if (facingBlock == ModBlocks.VERILOG_OUTPUT_BLOCK) {
+        if (facingBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
             return "input";
         }
 

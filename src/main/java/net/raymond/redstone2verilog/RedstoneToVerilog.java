@@ -2,17 +2,14 @@ package net.raymond.redstone2verilog;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.raymond.redstone2verilog.block.ModBlocks;
+import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 import net.raymond.redstone2verilog.event.BlockPlaceHandler;
-import net.raymond.redstone2verilog.item.ModItemGroups;
-import net.raymond.redstone2verilog.item.ModItems;
-import net.raymond.redstone2verilog.util.ModRegistries;
+import net.raymond.redstone2verilog.item.VerilogRedstoneItemGroups;
+import net.raymond.redstone2verilog.item.VerilogRedstoneItems;
+import net.raymond.redstone2verilog.util.VerilogRedstoneRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static net.minecraft.server.command.CommandManager.*;
 
 public class RedstoneToVerilog implements ModInitializer {
 	public static final String MOD_ID = "redstone2verilog";
@@ -24,12 +21,12 @@ public class RedstoneToVerilog implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		ModItems.registerModItems();
-		ModItemGroups.registerItemGroups();
+		VerilogRedstoneItems.registerModItems();
+		VerilogRedstoneItemGroups.registerItemGroups();
 
-		ModBlocks.registerModBlocks();
+		VerilogRedstoneBlocks.registerModBlocks();
 
-		ModRegistries.registerModRegistries();
+		VerilogRedstoneRegistries.registerModRegistries();
 
 		UseBlockCallback.EVENT.register(new BlockPlaceHandler());
 
