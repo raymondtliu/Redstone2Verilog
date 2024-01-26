@@ -8,6 +8,12 @@ public final class GateNotBlock extends AbstractLogicGateBlock {
     public GateNotBlock(Settings settings) {
         super(settings);
     }
+
+    @Override
+    public String toString() {
+        return "not";
+    }
+
     @Override
     public int gateLogic(World world, BlockPos pos, BlockState state) {
         // invert input signal

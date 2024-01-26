@@ -8,6 +8,12 @@ public class GateOrBlock extends AbstractLogicGateBlock{
     protected GateOrBlock(Settings settings) {
         super(settings);
     }
+
+    @Override
+    public String toString() {
+        return "or";
+    }
+
     @Override
     public int gateLogic(World world, BlockPos pos, BlockState state) {
         boolean right_powered = getDirectionalPower(world, pos, state.get(FACING).rotateYCounterclockwise()) > 0;

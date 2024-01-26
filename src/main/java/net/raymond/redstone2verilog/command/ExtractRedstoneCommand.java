@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.raymond.redstone2verilog.RedstoneToVerilog;
 import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,25 +76,34 @@ public final class ExtractRedstoneCommand {
             }
         }
 
-        RedstoneNetlist foundBlocks = null;
-
-
+        RedstoneNetlist foundBlocks = new RedstoneNetlist();
+        RedstoneNetlist tempNetlist = new RedstoneNetlist();
 
         for (InputVerilogPort input_block : input_blocks) {
-
-            foundBlocks = checkRedstoneNet(world, VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player);
+            tempNetlist.redstone_netlist.addAll(checkRedstoneNet(world, VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player).getRedstone_netlist());
         }
+
+        foundBlocks.redstone_netlist.clear();
+        foundBlocks.redstone_netlist.addAll(tempNetlist.getRedstone_netlist());
+        tempNetlist.redstone_netlist.clear();
 
         assert foundBlocks != null;
-        for (RedstoneNet net : foundBlocks.getRedstone_netlist()) {
-            if (net.finishing_block() == VerilogRedstoneBlocks.GATE_NOT_BLOCK) {
-                player.sendMessage(Text.of("found finishing block" + net.finishing_block().toString()));
 
-                checkRedstoneNet(world, VerilogRedstoneBlocks.GATE_NOT_BLOCK, new directionalBlockPos(net.endPos(), Direction.SOUTH), extracted_netlist, player);
+        while (!foundBlocks.getRedstone_netlist().isEmpty()) {
+            for (RedstoneNet net : foundBlocks.getRedstone_netlist()) {
+                RedstoneToVerilog.LOGGER.info("net is " + net.toString());
+                if (VerilogRedstoneBlocks.getGateBlocksList().contains(net.finishing_block())) {
+                    tempNetlist = checkRedstoneNet(world, net.finishing_block(), net.endPos(), extracted_netlist, player);
+                }
             }
+            foundBlocks.redstone_netlist.clear();
+            foundBlocks.redstone_netlist.addAll(tempNetlist.getRedstone_netlist());
+            tempNetlist.redstone_netlist.clear();
         }
 
+        RedstoneToVerilog.LOGGER.info("setting input blocks: " + input_blocks.toString());
         extracted_netlist.setInput_signals(input_blocks);
+        RedstoneToVerilog.LOGGER.info("setting output blocks: " + output_blocks.toString());
         extracted_netlist.setOutput_signals(output_blocks);
 
         return extracted_netlist;
@@ -102,11 +112,11 @@ public final class ExtractRedstoneCommand {
     /**
      * checks the redstone net to see what blocks are connected to the starting block
      *
-     * @return
      */
     private static RedstoneNetlist checkRedstoneNet(World world, Block startBlock, directionalBlockPos startPos, RedstoneNetlist netlist, PlayerEntity player) {
         Block block = world.getBlockState(startPos.pos()).getBlock();
 
+        RedstoneToVerilog.LOGGER.info("start block" + startBlock + "and directional block pos" + startPos + "redstone netlist " + netlist);
         // check if coordinates lead to same block as starting block
         if (block != startBlock) {
             return netlist;
@@ -118,25 +128,28 @@ public final class ExtractRedstoneCommand {
 
         currentPosList.add(startPos);
 
-        Direction facingDirection = Direction.NORTH;
         Direction[] directionList = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-        Block[] modBlocksList = {VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK, VerilogRedstoneBlocks.GATE_NOT_BLOCK};
 
+        RedstoneToVerilog.LOGGER.info("currentpos list " + currentPosList);
         while (!currentPosList.isEmpty()) {
-            for (directionalBlockPos pos:currentPosList){
+            for (directionalBlockPos dirpos:currentPosList){
                 for (Direction direction:directionList) {
-
-                    if (pos.direction() == direction) {
+                    if (world.getBlockState(dirpos.pos()).getBlock() == startBlock
+                            & world.getBlockState(dirpos.pos()).getBlock() != VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) {
+                        if (direction != world.getBlockState(startPos.pos()).get(Properties.HORIZONTAL_FACING).getOpposite()) {
+                            continue;
+                        }
+                    } else if (dirpos.direction() == direction & world.getBlockState(dirpos.pos()).getBlock() != startBlock) {
                         continue;
                     }
 
-                    Block checkBlock = world.getBlockState(pos.pos().offset(direction)).getBlock();
+                    Block checkBlock = world.getBlockState(dirpos.pos().offset(direction)).getBlock();
                     if (checkBlock == Blocks.REDSTONE_WIRE) {
-                        player.sendMessage(Text.of(direction.asString()));
-                        tempPosList.add(new directionalBlockPos(pos.pos().offset(direction), direction.getOpposite()));
-                    } else if (Arrays.asList(modBlocksList).contains(checkBlock)) {
-                        endPosList.add(new directionalBlockPos(pos.pos().offset(direction), direction.getOpposite()));
-                        player.sendMessage(Text.of("added end block to list!"));
+                        RedstoneToVerilog.LOGGER.info(direction.asString());
+                        tempPosList.add(new directionalBlockPos(dirpos.pos().offset(direction), direction.getOpposite()));
+                    } else if (VerilogRedstoneBlocks.getGateBlocksList().contains(checkBlock) | checkBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
+                        endPosList.add(new directionalBlockPos(dirpos.pos().offset(direction), direction.getOpposite()));
+                        player.sendMessage(Text.of("added " + checkBlock.getName().getString() + " to list!"));
                     }
                 }
             }
@@ -148,22 +161,29 @@ public final class ExtractRedstoneCommand {
         }
 
         // get ports of start and end ports using the startblock and start pos and facing direction
-        String startPort = getPort(world, player, startBlock, startPos.pos(), facingDirection);
+        String startPort = getPort(world, player, startBlock, startPos.pos(), (startPos.direction() == null) ? null : world.getBlockState(startPos.pos()).get(Properties.HORIZONTAL_FACING).getOpposite());
+        RedstoneToVerilog.LOGGER.info("startport: " + startPort);
 
         // Create incremental net names
         String net_name = "net" + netlist.getNetlistLength();
+        RedstoneToVerilog.LOGGER.info("netname is: " + net_name);
 
         RedstoneNetlist returnNetlist = new RedstoneNetlist();
 
-        for (directionalBlockPos endPos:endPosList) {
-            BlockPos endingPos = endPos.pos();
+        for (directionalBlockPos endDirPos:endPosList) {
+            BlockPos endingPos = endDirPos.pos();
             Block endingBlock = world.getBlockState(endingPos).getBlock();
-            String endingPort = getPort(world, player, endingBlock, endingPos, facingDirection.getOpposite());
+
+            RedstoneToVerilog.LOGGER.info("finding ending port: " + endingBlock + endingPos + endDirPos.direction());
+            String endingPort = getPort(world, player, endingBlock, endingPos, endDirPos.direction());
+            RedstoneToVerilog.LOGGER.info("ending port is: " + endingPort);
+
             if (endingPort == null) continue;
 
-            RedstoneNet net = new RedstoneNet(net_name, startBlock, startPos.pos(), startPort, endingBlock, endingPos, endingPort);
+            RedstoneNet net = new RedstoneNet(net_name, startBlock, startPos, startPort, endingBlock, endDirPos, endingPort);
             netlist.addRedstoneNet(net);
             returnNetlist.addRedstoneNet(net);
+
             player.sendMessage(Text.of("netlist is " + netlist));
 
         }
@@ -173,9 +193,8 @@ public final class ExtractRedstoneCommand {
 
     @Nullable
     private static String getPort(World world, PlayerEntity player, Block facingBlock, BlockPos currentPos, Direction facingDirection) {
-        List<Block> mod_blocks_list = List.of(VerilogRedstoneBlocks.GATE_NOT_BLOCK,
-                VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK,
-                VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK);
+        //Check if block is not a verilog block
+        List<Block> mod_blocks_list = VerilogRedstoneBlocks.getVerilogBlocksList();
 
         if (!mod_blocks_list.contains(facingBlock)) {
             return null;
@@ -190,12 +209,29 @@ public final class ExtractRedstoneCommand {
 
         Direction block_direction = world.getBlockState(currentPos).get(Properties.HORIZONTAL_FACING);
 
-        if (facingDirection.getOpposite() == block_direction) {
-            return "output";
-        } else if (block_direction == facingDirection) {
-            return "input";
-        } else {
-            return null;
+        if (VerilogRedstoneBlocks.getOneInputGateBlocksList().contains(facingBlock)) {
+            if (facingDirection == block_direction) {
+                return "input";
+            } else if (facingDirection == block_direction.getOpposite()) {
+                return "output";
+            } else {
+                return "";
+            }
         }
+
+        if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(facingBlock)) {
+            if (facingDirection == block_direction) {
+                return "input";
+            } else if (facingDirection == block_direction.getOpposite()) {
+                return "output";
+            } else if (facingDirection == block_direction.rotateYClockwise()) {
+                return "left_port";
+            } else if (facingDirection == block_direction.rotateYCounterclockwise()) {
+                return "right_port";
+            } else {
+                return "";
+            }
+        }
+        return null;
     }
 }

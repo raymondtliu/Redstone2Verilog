@@ -10,6 +10,8 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
+import java.util.List;
+
 public class VerilogRedstoneBlocks {
     public static final Block VERILOG_INPUT_BLOCK = registerBlock("verilog_input_block",
             new VerilogInputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
@@ -21,6 +23,32 @@ public class VerilogRedstoneBlocks {
             new GateAndBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
     public static final Block GATE_OR_BLOCK = registerBlock("gate_or_block",
             new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+
+
+    public static List<Block> getGateBlocksList() {
+        return List.of(
+                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
+                VerilogRedstoneBlocks.GATE_AND_BLOCK,
+                VerilogRedstoneBlocks.GATE_OR_BLOCK);
+    }
+    public static List<Block> getOneInputGateBlocksList() {
+        return List.of(
+                VerilogRedstoneBlocks.GATE_NOT_BLOCK);
+    }
+
+    public static List<Block> getTwoInputGateBlocksList() {
+        return List.of(
+                VerilogRedstoneBlocks.GATE_AND_BLOCK,
+                VerilogRedstoneBlocks.GATE_OR_BLOCK);
+    }
+    public static List<Block> getVerilogBlocksList() {
+        return List.of(
+                VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK,
+                VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK,
+                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
+                VerilogRedstoneBlocks.GATE_AND_BLOCK,
+                VerilogRedstoneBlocks.GATE_OR_BLOCK);
+    }
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

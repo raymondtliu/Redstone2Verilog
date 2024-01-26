@@ -1,10 +1,8 @@
 package net.raymond.redstone2verilog.command;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
 
-
-public record RedstoneNet(String net_name, Block starting_block, BlockPos startPos, String startPort, Block finishing_block, BlockPos endPos, String endPort) {
+public record RedstoneNet(String net_name, Block starting_block, directionalBlockPos startPos, String startPort, Block finishing_block, directionalBlockPos endPos, String endPort) {
 
     @Override
     public String toString() {
@@ -13,12 +11,12 @@ public record RedstoneNet(String net_name, Block starting_block, BlockPos startP
                 finishing_block.getName().getString() + " " +
                 startPort + " " +
                 endPort + " " +
-                startPos.getX() + "," +
-                startPos.getY() + "," +
-                startPos.getZ() + " " +
-                endPos.getX() + "," +
-                endPos.getY() + "," +
-                endPos.getZ()
+                startPos.pos().getX() + "," +
+                startPos.pos().getY() + "," +
+                startPos.pos().getZ() + " " +
+                endPos.pos().getX() + "," +
+                endPos.pos().getY() + "," +
+                endPos.pos().getZ()
                 ;
     }
 }

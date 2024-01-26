@@ -8,6 +8,12 @@ public class GateAndBlock extends AbstractLogicGateBlock{
     protected GateAndBlock(Settings settings) {
         super(settings);
     }
+
+    @Override
+    public String toString() {
+        return "and";
+    }
+
     @Override
     public int gateLogic(World world, BlockPos pos, BlockState state) {
         boolean right_powered = getDirectionalPower(world, pos, state.get(FACING).rotateYCounterclockwise()) > 0;
