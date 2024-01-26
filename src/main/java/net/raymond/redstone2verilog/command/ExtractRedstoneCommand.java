@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public final class ExtractRedstoneCommand {
@@ -53,6 +54,7 @@ public final class ExtractRedstoneCommand {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
         RedstoneNetlist extracted_netlist = new RedstoneNetlist();
+        List<BlockPos> checkedPos = new ArrayList<>();
 
         assert player != null;
         int player_xpos = (int) player.getX();
@@ -80,20 +82,22 @@ public final class ExtractRedstoneCommand {
         RedstoneNetlist tempNetlist = new RedstoneNetlist();
 
         for (InputVerilogPort input_block : input_blocks) {
-            tempNetlist.redstone_netlist.addAll(checkRedstoneNet(world, VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player).getRedstone_netlist());
+            tempNetlist.redstone_netlist.addAll(checkRedstoneNet(world, VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK, checkedPos, new directionalBlockPos(input_block.getPort_pos(), null), extracted_netlist, player).getRedstone_netlist());
         }
 
         foundBlocks.redstone_netlist.clear();
         foundBlocks.redstone_netlist.addAll(tempNetlist.getRedstone_netlist());
         tempNetlist.redstone_netlist.clear();
 
-        assert foundBlocks != null;
-
         while (!foundBlocks.getRedstone_netlist().isEmpty()) {
             for (RedstoneNet net : foundBlocks.getRedstone_netlist()) {
                 RedstoneToVerilog.LOGGER.info("net is " + net.toString());
+                if (checkedPos.contains(net.endPos().pos())) {
+                    continue;
+                }
+
                 if (VerilogRedstoneBlocks.getGateBlocksList().contains(net.finishing_block())) {
-                    tempNetlist = checkRedstoneNet(world, net.finishing_block(), net.endPos(), extracted_netlist, player);
+                    tempNetlist = checkRedstoneNet(world, net.finishing_block(), checkedPos, net.endPos(), extracted_netlist, player);
                 }
             }
             foundBlocks.redstone_netlist.clear();
@@ -113,7 +117,7 @@ public final class ExtractRedstoneCommand {
      * checks the redstone net to see what blocks are connected to the starting block
      *
      */
-    private static RedstoneNetlist checkRedstoneNet(World world, Block startBlock, directionalBlockPos startPos, RedstoneNetlist netlist, PlayerEntity player) {
+    private static RedstoneNetlist checkRedstoneNet(World world, Block startBlock, List<BlockPos> posList, directionalBlockPos startPos, RedstoneNetlist netlist, PlayerEntity player) {
         Block block = world.getBlockState(startPos.pos()).getBlock();
 
         RedstoneToVerilog.LOGGER.info("start block" + startBlock + "and directional block pos" + startPos + "redstone netlist " + netlist);
@@ -121,6 +125,8 @@ public final class ExtractRedstoneCommand {
         if (block != startBlock) {
             return netlist;
         }
+
+        posList.add(startPos.pos());
 
         List<directionalBlockPos> currentPosList = new ArrayList<>();
         List<directionalBlockPos> tempPosList = new ArrayList<>();
@@ -149,7 +155,6 @@ public final class ExtractRedstoneCommand {
                         tempPosList.add(new directionalBlockPos(dirpos.pos().offset(direction), direction.getOpposite()));
                     } else if (VerilogRedstoneBlocks.getGateBlocksList().contains(checkBlock) | checkBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
                         endPosList.add(new directionalBlockPos(dirpos.pos().offset(direction), direction.getOpposite()));
-                        player.sendMessage(Text.of("added " + checkBlock.getName().getString() + " to list!"));
                     }
                 }
             }
@@ -184,7 +189,7 @@ public final class ExtractRedstoneCommand {
             netlist.addRedstoneNet(net);
             returnNetlist.addRedstoneNet(net);
 
-            player.sendMessage(Text.of("netlist is " + netlist));
+            player.sendMessage(Text.of("netlist is \n" + netlist));
 
         }
 
