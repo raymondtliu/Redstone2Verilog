@@ -31,6 +31,7 @@ public class VerilogNetlist {
     public String generateVerilog() {
         String header = buildInputOutputSignals();
         String logic = buildLogic();
+        checkedPos.clear();
 
         return header +
                 logic +
@@ -84,8 +85,9 @@ public class VerilogNetlist {
                 block_inputs.clear();
                 block_outputs.clear();
             }
-            RedstoneToVerilog.LOGGER.info(logicString.toString());
         }
+
+        RedstoneToVerilog.LOGGER.info("logic string is: " + logicString.toString());
         return logicString.toString();
     }
 
