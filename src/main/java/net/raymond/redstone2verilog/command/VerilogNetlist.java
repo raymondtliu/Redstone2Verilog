@@ -39,46 +39,52 @@ public class VerilogNetlist {
 
     private String buildLogic() {
         StringBuilder logicString = new StringBuilder();
+        List<RedstoneNet> block_inputs = new ArrayList<>();
+        List<RedstoneNet> block_outputs = new ArrayList<>();
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
             if (VerilogRedstoneBlocks.getOneInputGateBlocksList().contains(net.finishing_block())) {
-                // e.g. not(
+
+                findConnectedNet(net, block_inputs, block_outputs);
+
                 logicString.append("\t")
                         .append(net.finishing_block().toString())
-                        .append("(");
-
-                List<RedstoneNet> connected_nets = findConnectedNet(net);
-
-                assert connected_nets.size() == 1 : "connected nets for 1 input gate is more than 1";
-
-                logicString.append(connected_nets.get(0).net_name())
+                        .append("(")
+                        .append(block_outputs.get(0).net_name())
                         .append(", ")
                         .append(net.net_name())
                         .append(");\n");
+
             }
+
+            block_inputs.clear();
+            block_outputs.clear();
         }
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
             if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(net.finishing_block())) {
-                List<RedstoneNet> connected_nets = findConnectedNet(net);
+                findConnectedNet(net, block_inputs, block_outputs);
 
-                if (connected_nets.isEmpty()) {
+                if (block_inputs.isEmpty() && block_outputs.isEmpty()) {
                     continue;
                 }
 
-                assert connected_nets.size() == 2 : "connected nets for 2 input gate is not 2";
 
-                // e.g. not(
                 logicString.append("\t")
                         .append(net.finishing_block().toString())
                         .append("(")
-                        .append(connected_nets.get(0).net_name())
+                        .append(block_outputs.get(0).net_name())
                         .append(", ")
-                        .append(connected_nets.get(1).net_name())
+                        .append(block_inputs.get(0).net_name())
                         .append(", ")
                         .append(net.net_name())
                         .append(");\n");
+
+
+                block_inputs.clear();
+                block_outputs.clear();
             }
+            RedstoneToVerilog.LOGGER.info(logicString.toString());
         }
         return logicString.toString();
     }
@@ -87,11 +93,7 @@ public class VerilogNetlist {
      * Finds connected nets of each ending block of the net
      * {@return a list of nets which are connected}
      */
-    private List<RedstoneNet> findConnectedNet(RedstoneNet net) {
-        List<RedstoneNet> connected_nets = new ArrayList<>();
-        List<RedstoneNet> connected_input_nets = new ArrayList<>();
-        List<RedstoneNet> connected_output_nets = new ArrayList<>();
-
+    private void findConnectedNet(RedstoneNet net, List<RedstoneNet> input_nets, List<RedstoneNet> output_nets) {
         List<BlockPos> tempCheckedPos = new ArrayList<>();
 
         RedstoneToVerilog.LOGGER.info("finding connected nets of: " + net);
@@ -99,34 +101,32 @@ public class VerilogNetlist {
         // skips over checked positions
         if (checkedPos.contains(net.endPos().pos())) {
             RedstoneToVerilog.LOGGER.info("checked pos " + checkedPos + " contains end pos: " + net.endPos().pos().toString());
-            return connected_nets;
+            return;
         }
 
         for(RedstoneNet checkedNet:this.redstone_netlist.getRedstone_netlist()) {
             RedstoneToVerilog.LOGGER.info("checking against net: " + checkedNet);
 
             if (net == checkedNet) {
+                RedstoneToVerilog.LOGGER.info("Skipping same net");
                 continue;
             }
 
             RedstoneToVerilog.LOGGER.info("checking pos " + net.endPos().pos() + " against " + checkedNet.endPos().pos());
             if (net.endPos().pos().equals(checkedNet.endPos().pos())) {
-                connected_input_nets.add(checkedNet);
+                input_nets.add(checkedNet);
                 tempCheckedPos.add(net.endPos().pos());
             }
 
             if (net.endPos().pos().equals(checkedNet.startPos().pos())) {
-                connected_output_nets.add(checkedNet);
+                output_nets.add(checkedNet);
             }
         }
 
-        connected_nets.addAll(connected_output_nets);
-        connected_nets.addAll(connected_input_nets);
-
         checkedPos.addAll(tempCheckedPos);
 
-        RedstoneToVerilog.LOGGER.info("Looking for connected net of: " + net + " and found connected net: " + connected_nets);
-        return connected_nets;
+        RedstoneToVerilog.LOGGER.info("Looking for connected net of: " + net + " and found input net: " + input_nets + " and found output net: " + output_nets);
+        return;
     }
 
     private String buildInputOutputSignals() {

@@ -120,7 +120,7 @@ public final class ExtractRedstoneCommand {
     private static RedstoneNetlist checkRedstoneNet(World world, Block startBlock, List<BlockPos> posList, directionalBlockPos startPos, RedstoneNetlist netlist, PlayerEntity player) {
         Block block = world.getBlockState(startPos.pos()).getBlock();
 
-        RedstoneToVerilog.LOGGER.info("start block" + startBlock + "and directional block pos" + startPos + "redstone netlist " + netlist);
+        RedstoneToVerilog.LOGGER.info("start block: " + startBlock + ", and directional block pos: " + startPos + ", redstone netlist: " + netlist);
         // check if coordinates lead to same block as starting block
         if (block != startBlock) {
             return netlist;
@@ -189,10 +189,10 @@ public final class ExtractRedstoneCommand {
             netlist.addRedstoneNet(net);
             returnNetlist.addRedstoneNet(net);
 
-            player.sendMessage(Text.of("netlist is \n" + netlist));
 
         }
 
+        RedstoneToVerilog.LOGGER.info("return netlist is \n" + returnNetlist);
         return returnNetlist;
     }
 
