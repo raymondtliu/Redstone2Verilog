@@ -24,7 +24,7 @@ public class VerilogRedstoneBlocks {
     public static final Block GATE_OR_BLOCK = registerBlock("gate_or_block",
             new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
     public static final Block LATCH_D_BLOCK = registerBlock("latch_d_block",
-            new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+            new LatchDBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
 
 
     public static List<Block> getGateBlocksList() {

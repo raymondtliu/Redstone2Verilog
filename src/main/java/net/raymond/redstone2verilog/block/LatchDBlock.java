@@ -11,14 +11,19 @@ public class LatchDBlock extends AbstractLogicGateBlock{
 
     @Override
     public String toString() {
-        return "dlatch";
+        return "d_latch";
     }
 
     @Override
     public int gateLogic(World world, BlockPos pos, BlockState state) {
-        boolean right_powered = getDirectionalPower(world, pos, state.get(FACING).rotateYCounterclockwise()) > 0;
-        boolean left_powered = getDirectionalPower(world, pos, state.get(FACING).rotateYClockwise()) > 0;
+        boolean input_powered = getDirectionalPower(world, pos, state.get(FACING)) > 0;
+        boolean enable_powered = getDirectionalPower(world, pos, state.get(FACING).rotateYCounterclockwise()) > 0;
+        boolean output_powered = getDirectionalPower(world, pos, state.get(FACING).getOpposite()) > 0;
 
-        return left_powered & right_powered ? 15:0;
+        if (enable_powered) {
+            return input_powered ? 15:0;
+        } else {
+            return output_powered ? 15:0;
+        }
     }
 }

@@ -17,12 +17,11 @@ import java.util.Objects;
 
 public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     public static final BooleanProperty POWERED = Properties.POWERED;
-    public static final BooleanProperty INPUT_POWERED = BooleanProperty.of("input_powered");
     public abstract int gateLogic(World world, BlockPos pos, BlockState state);
 
     protected AbstractLogicGateBlock(Settings settings) {
         super(settings);
-        setDefaultState(getDefaultState().with(INPUT_POWERED, false).with(FACING, Direction.NORTH));
+        setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -35,14 +34,6 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     @Override
     public boolean emitsRedstonePower(BlockState state) {
         return true;
-    }
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockPos blockPos = ctx.getBlockPos();
-        World world = ctx.getWorld();
-        Boolean northpower = world.isReceivingRedstonePower(blockPos.north());
-
-        return Objects.requireNonNull(super.getPlacementState(ctx)).with(INPUT_POWERED, northpower);
     }
 
     @Override
@@ -70,7 +61,7 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(INPUT_POWERED, POWERED, FACING);
+        builder.add(POWERED, FACING);
     }
 
     // Sets this block can emit power level of 15 (max)
