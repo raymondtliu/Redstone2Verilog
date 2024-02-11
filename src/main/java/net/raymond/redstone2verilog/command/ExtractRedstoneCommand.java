@@ -93,11 +93,12 @@ public final class ExtractRedstoneCommand {
             for (RedstoneNet net : foundBlocks.getRedstone_netlist()) {
                 RedstoneToVerilog.LOGGER.info("net is " + net.toString());
                 if (checkedPos.contains(net.endPos().pos())) {
+                    RedstoneToVerilog.LOGGER.info("found end pos in checked pos list: " + net.endPos().pos());
                     continue;
                 }
 
                 if (VerilogRedstoneBlocks.getGateBlocksList().contains(net.finishing_block())) {
-                    tempNetlist = checkRedstoneNet(world, net.finishing_block(), checkedPos, net.endPos(), extracted_netlist, player);
+                    tempNetlist.redstone_netlist.addAll(checkRedstoneNet(world, net.finishing_block(), checkedPos, net.endPos(), extracted_netlist, player).getRedstone_netlist());
                 }
             }
             foundBlocks.redstone_netlist.clear();
