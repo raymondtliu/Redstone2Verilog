@@ -207,37 +207,39 @@ public final class ExtractRedstoneCommand {
         }
 
         if (facingBlock == VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) {
-            return "output";
+            return "out";
         }
         if (facingBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
-            return "input";
+            return "in";
         }
 
         Direction block_direction = world.getBlockState(currentPos).get(Properties.HORIZONTAL_FACING);
 
         if (VerilogRedstoneBlocks.getOneInputGateBlocksList().contains(facingBlock)) {
             if (facingDirection == block_direction) {
-                return "input";
+                return "in";
             } else if (facingDirection == block_direction.getOpposite()) {
-                return "output";
-            } else {
-                if ( world.getBlockState(currentPos).getBlock().equals(VerilogRedstoneBlocks.LATCH_D_BLOCK)) {
-                    return "clk";
-                } else {
-                    return "";
-                }
+                return "out";
+            }
+        }
+
+        if (VerilogRedstoneBlocks.getLatchBlocksList().contains(facingBlock)) {
+            if (facingDirection == block_direction) {
+                return "d";
+            } else if (facingDirection == block_direction.getOpposite()) {
+                return "q";
+            } else if (facingDirection == block_direction.rotateYCounterclockwise()) {
+                return "clk";
             }
         }
 
         if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(facingBlock)) {
-            if (facingDirection == block_direction) {
-                return "input";
-            } else if (facingDirection == block_direction.getOpposite()) {
-                return "output";
+            if (facingDirection == block_direction.getOpposite()) {
+                return "out";
             } else if (facingDirection == block_direction.rotateYClockwise()) {
-                return "left_port";
+                return "i1";
             } else if (facingDirection == block_direction.rotateYCounterclockwise()) {
-                return "right_port";
+                return "i2";
             } else {
                 return "";
             }

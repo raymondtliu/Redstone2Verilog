@@ -32,6 +32,7 @@ public class VerilogRedstoneBlocks {
         List<Block> returnList = new ArrayList<>();
         returnList.addAll(getOneInputGateBlocksList());
         returnList.addAll(getTwoInputGateBlocksList());
+        returnList.addAll(getLatchBlocksList());
         return returnList;
     }
     public static List<Block> getOneInputGateBlocksList() {
