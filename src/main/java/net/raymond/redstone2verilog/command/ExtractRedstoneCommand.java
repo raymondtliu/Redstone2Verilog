@@ -184,7 +184,7 @@ public final class ExtractRedstoneCommand {
             String endingPort = getPort(world, player, endingBlock, endingPos, endDirPos.direction());
             RedstoneToVerilog.LOGGER.info("ending port is: " + endingPort);
 
-            if (endingPort == null) continue;
+            if (endingPort == "") continue;
 
             RedstoneNet net = new RedstoneNet(net_name, startBlock, startPos, startPort, endingBlock, endDirPos, endingPort);
             netlist.addRedstoneNet(net);
@@ -221,7 +221,11 @@ public final class ExtractRedstoneCommand {
             } else if (facingDirection == block_direction.getOpposite()) {
                 return "output";
             } else {
-                return "";
+                if ( world.getBlockState(currentPos).getBlock().equals(VerilogRedstoneBlocks.LATCH_D_BLOCK)) {
+                    return "clk";
+                } else {
+                    return "";
+                }
             }
         }
 

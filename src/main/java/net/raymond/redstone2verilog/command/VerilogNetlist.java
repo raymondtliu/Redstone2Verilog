@@ -45,10 +45,9 @@ public class VerilogNetlist {
         List<RedstoneNet> block_outputs = new ArrayList<>();
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
+            findConnectedNet(net, block_inputs, block_outputs);
+
             if (VerilogRedstoneBlocks.getOneInputGateBlocksList().contains(net.finishing_block())) {
-
-                findConnectedNet(net, block_inputs, block_outputs);
-
                 logicString.append("\t")
                         .append(net.finishing_block().toString())
                         .append("(")
@@ -56,21 +55,10 @@ public class VerilogNetlist {
                         .append(", ")
                         .append(net.net_name())
                         .append(");\n");
-
-            }
-
-            block_inputs.clear();
-            block_outputs.clear();
-        }
-
-        for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
-            if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(net.finishing_block())) {
-                findConnectedNet(net, block_inputs, block_outputs);
-
+            } else if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(net.finishing_block())) {
                 if (block_inputs.isEmpty() && block_outputs.isEmpty()) {
                     continue;
                 }
-
 
                 logicString.append("\t")
                         .append(net.finishing_block().toString())
@@ -81,11 +69,11 @@ public class VerilogNetlist {
                         .append(", ")
                         .append(net.net_name())
                         .append(");\n");
-
-
-                block_inputs.clear();
-                block_outputs.clear();
             }
+
+
+            block_inputs.clear();
+            block_outputs.clear();
         }
 
         RedstoneToVerilog.LOGGER.info("logic string is: " + logicString.toString());
@@ -129,7 +117,6 @@ public class VerilogNetlist {
         checkedPos.addAll(tempCheckedPos);
 
         RedstoneToVerilog.LOGGER.info("Looking for connected net of: " + net + " and found input net: " + input_nets + " and found output net: " + output_nets);
-        return;
     }
 
     private String buildInputOutputSignals() {

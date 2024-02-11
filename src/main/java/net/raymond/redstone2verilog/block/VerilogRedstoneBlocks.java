@@ -10,6 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VerilogRedstoneBlocks {
@@ -28,16 +29,14 @@ public class VerilogRedstoneBlocks {
 
 
     public static List<Block> getGateBlocksList() {
-        return List.of(
-                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
-                VerilogRedstoneBlocks.GATE_AND_BLOCK,
-                VerilogRedstoneBlocks.GATE_OR_BLOCK,
-                VerilogRedstoneBlocks.LATCH_D_BLOCK);
+        List<Block> returnList = new ArrayList<>();
+        returnList.addAll(getOneInputGateBlocksList());
+        returnList.addAll(getTwoInputGateBlocksList());
+        return returnList;
     }
     public static List<Block> getOneInputGateBlocksList() {
         return List.of(
-                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
-                VerilogRedstoneBlocks.LATCH_D_BLOCK);
+                VerilogRedstoneBlocks.GATE_NOT_BLOCK);
     }
 
     public static List<Block> getTwoInputGateBlocksList() {
@@ -45,14 +44,22 @@ public class VerilogRedstoneBlocks {
                 VerilogRedstoneBlocks.GATE_AND_BLOCK,
                 VerilogRedstoneBlocks.GATE_OR_BLOCK);
     }
-    public static List<Block> getVerilogBlocksList() {
+    public static List<Block> getInputOutputBlocksList() {
         return List.of(
                 VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK,
-                VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK,
-                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
-                VerilogRedstoneBlocks.GATE_AND_BLOCK,
-                VerilogRedstoneBlocks.GATE_OR_BLOCK,
+                VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK);
+    }
+    public static List<Block> getLatchBlocksList() {
+        return List.of(
                 VerilogRedstoneBlocks.LATCH_D_BLOCK);
+    }
+    public static List<Block> getVerilogBlocksList() {
+        List<Block> returnList = new ArrayList<>();
+        returnList.addAll(getOneInputGateBlocksList());
+        returnList.addAll(getTwoInputGateBlocksList());
+        returnList.addAll(getLatchBlocksList());
+        returnList.addAll(getInputOutputBlocksList());
+        return returnList;
     }
 
     private static Block registerBlock(String name, Block block) {
