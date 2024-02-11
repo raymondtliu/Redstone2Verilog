@@ -1,42 +1,45 @@
 package net.raymond.redstone2verilog.command;
 
+import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RedstoneNetlist {
-    public void setInput_signals(List<InputVerilogPort> input_signals) {
-        this.input_signals = input_signals;
-    }
-
-    public void setOutput_signals(List<OutputVerilogPort> output_signals) {
-        this.output_signals = output_signals;
-    }
-
-    public List<InputVerilogPort> getInput_signals() {
-        return input_signals;
-    }
-
-    public List<OutputVerilogPort> getOutput_signals() {
-        return output_signals;
-    }
-
-    private List<InputVerilogPort> input_signals;
-    private List<OutputVerilogPort> output_signals;
-
     public List<RedstoneNet> getRedstone_netlist() {
         return redstone_netlist;
-    }
-
-    public RedstoneNet getLastRedstoneNet() {
-        return redstone_netlist.get(redstone_netlist.size() - 1);
     }
 
     List<RedstoneNet> redstone_netlist = new ArrayList<>();
     public RedstoneNetlist() {
     }
 
-    public int getNetlistLength() {
-        return this.redstone_netlist.size();
+    public int getInputNetSize() {
+        int size = 0;
+        for (RedstoneNet net:this.redstone_netlist) {
+            if (net.starting_block().equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK)) {
+                size++;
+            }
+        }
+        return size;
+    }
+    public int getOutputNetSize() {
+        int size = 0;
+        for (RedstoneNet net:this.redstone_netlist) {
+            if (net.finishing_block().equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
+                size++;
+            }
+        }
+        return size;
+    }
+    public int getNetSize() {
+        int size = 0;
+        for (RedstoneNet net:this.redstone_netlist) {
+            if (!net.starting_block().equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) & !net.finishing_block().equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
+                size++;
+            }
+        }
+        return size;
     }
     public void addRedstoneNet(RedstoneNet net) {
         this.redstone_netlist.add(net);

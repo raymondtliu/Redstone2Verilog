@@ -44,6 +44,7 @@ public class VerilogNetlist {
         List<RedstoneNet> block_inputs = new ArrayList<>();
         List<RedstoneNet> block_outputs = new ArrayList<>();
         List<RedstoneNet> block_clocks = new ArrayList<>();
+        int gate_counter = 0;
 
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
             findConnectedNet(net, block_inputs, block_outputs, block_clocks);
@@ -52,9 +53,13 @@ public class VerilogNetlist {
                 continue;
             }
 
+            gate_counter++;
+
             logicString.append("\t")
                     .append(net.finishing_block().toString())
-                    .append("(.")
+                    .append(" g")
+                    .append(gate_counter)
+                    .append(" (.")
                     .append(block_outputs.get(0).startPort())
                     .append("(")
                     .append(block_outputs.get(0).net_name())

@@ -20,9 +20,7 @@ import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public final class ExtractRedstoneCommand {
@@ -64,7 +62,6 @@ public final class ExtractRedstoneCommand {
         int search_range = 100;
 
         List<InputVerilogPort> input_blocks = new ArrayList<>();
-        List<OutputVerilogPort> output_blocks = new ArrayList<>();
 
         // loop through nearby blocks
         for (int x = player_xpos - search_range; x < player_xpos + search_range; x++) {
@@ -105,11 +102,6 @@ public final class ExtractRedstoneCommand {
             foundBlocks.redstone_netlist.addAll(tempNetlist.getRedstone_netlist());
             tempNetlist.redstone_netlist.clear();
         }
-
-        RedstoneToVerilog.LOGGER.info("setting input blocks: " + input_blocks.toString());
-        extracted_netlist.setInput_signals(input_blocks);
-        RedstoneToVerilog.LOGGER.info("setting output blocks: " + output_blocks.toString());
-        extracted_netlist.setOutput_signals(output_blocks);
 
         return extracted_netlist;
     }
@@ -170,10 +162,6 @@ public final class ExtractRedstoneCommand {
         String startPort = getPort(world, player, startBlock, startPos.pos(), (startPos.direction() == null) ? null : world.getBlockState(startPos.pos()).get(Properties.HORIZONTAL_FACING).getOpposite());
         RedstoneToVerilog.LOGGER.info("startport: " + startPort);
 
-        // Create incremental net names
-        String net_name = "net" + netlist.getNetlistLength();
-        RedstoneToVerilog.LOGGER.info("netname is: " + net_name);
-
         RedstoneNetlist returnNetlist = new RedstoneNetlist();
 
         for (directionalBlockPos endDirPos:endPosList) {
@@ -185,6 +173,17 @@ public final class ExtractRedstoneCommand {
             RedstoneToVerilog.LOGGER.info("ending port is: " + endingPort);
 
             if (endingPort == "") continue;
+
+            // Create incremental net names
+            String net_name;
+            if (startBlock.equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK)) {
+                net_name = "in" + netlist.getInputNetSize();
+            } else if (endingBlock.equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
+                net_name = "out" + netlist.getOutputNetSize();
+            } else {
+                net_name = "net" + netlist.getNetSize();
+            }
+            RedstoneToVerilog.LOGGER.info("netname is: " + net_name);
 
             RedstoneNet net = new RedstoneNet(net_name, startBlock, startPos, startPort, endingBlock, endDirPos, endingPort);
             netlist.addRedstoneNet(net);
