@@ -7,5 +7,7 @@
   "block.redstone2verilog.gate_and_block": "AND Gate Block",
   "block.redstone2verilog.gate_or_block": "OR Gate Block",
 
+  "block.redstone2verilog.latch_d_block": "D Latch Block",
+
   "itemgroup.verilog_group": "Redstone to Verilog"
 }

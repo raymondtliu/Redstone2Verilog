@@ -23,17 +23,21 @@ public class VerilogRedstoneBlocks {
             new GateAndBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
     public static final Block GATE_OR_BLOCK = registerBlock("gate_or_block",
             new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+    public static final Block LATCH_D_BLOCK = registerBlock("latch_d_block",
+            new GateOrBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
 
 
     public static List<Block> getGateBlocksList() {
         return List.of(
                 VerilogRedstoneBlocks.GATE_NOT_BLOCK,
                 VerilogRedstoneBlocks.GATE_AND_BLOCK,
-                VerilogRedstoneBlocks.GATE_OR_BLOCK);
+                VerilogRedstoneBlocks.GATE_OR_BLOCK,
+                VerilogRedstoneBlocks.LATCH_D_BLOCK);
     }
     public static List<Block> getOneInputGateBlocksList() {
         return List.of(
-                VerilogRedstoneBlocks.GATE_NOT_BLOCK);
+                VerilogRedstoneBlocks.GATE_NOT_BLOCK,
+                VerilogRedstoneBlocks.LATCH_D_BLOCK);
     }
 
     public static List<Block> getTwoInputGateBlocksList() {
@@ -47,7 +51,8 @@ public class VerilogRedstoneBlocks {
                 VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK,
                 VerilogRedstoneBlocks.GATE_NOT_BLOCK,
                 VerilogRedstoneBlocks.GATE_AND_BLOCK,
-                VerilogRedstoneBlocks.GATE_OR_BLOCK);
+                VerilogRedstoneBlocks.GATE_OR_BLOCK,
+                VerilogRedstoneBlocks.LATCH_D_BLOCK);
     }
 
     private static Block registerBlock(String name, Block block) {
