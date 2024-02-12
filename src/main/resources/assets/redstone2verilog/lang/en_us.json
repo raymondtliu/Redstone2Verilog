@@ -6,6 +6,10 @@
   "block.redstone2verilog.gate_not_block": "NOT Gate Block",
   "block.redstone2verilog.gate_and_block": "AND Gate Block",
   "block.redstone2verilog.gate_or_block": "OR Gate Block",
+  "block.redstone2verilog.gate_nand_block": "NAND Gate Block",
+  "block.redstone2verilog.gate_nor_block": "NOR Gate Block",
+  "block.redstone2verilog.gate_xnor_block": "XNOR Gate Block",
+  "block.redstone2verilog.gate_xor_block": "XOR Gate Block",
 
   "block.redstone2verilog.latch_d_block": "D Latch Block",
 

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "redstone2verilog:block/gate_xnor_block"
+    },
+
+    "facing=west": {
+      "model": "redstone2verilog:block/gate_xnor_block",
+      "y": 270
+    },
+
+    "facing=south": {
+      "model": "redstone2verilog:block/gate_xnor_block",
+      "y": 180
+    },
+
+    "facing=east": {
+      "model": "redstone2verilog:block/gate_xnor_block",
+      "y": 90
+    }
+  }
+}

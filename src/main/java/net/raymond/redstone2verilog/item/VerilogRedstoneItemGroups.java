@@ -27,6 +27,11 @@ public class VerilogRedstoneItemGroups {
                         entries.add(VerilogRedstoneBlocks.GATE_NOT_BLOCK);
                         entries.add(VerilogRedstoneBlocks.GATE_AND_BLOCK);
                         entries.add(VerilogRedstoneBlocks.GATE_OR_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_NAND_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_NOR_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_XNOR_BLOCK);
+                        entries.add(VerilogRedstoneBlocks.GATE_XOR_BLOCK);
+
                         entries.add(VerilogRedstoneBlocks.LATCH_D_BLOCK);
                     }).build());
 

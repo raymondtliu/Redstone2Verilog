@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "redstone2verilog:block/gate_xor_block"
+    },
+
+    "facing=west": {
+      "model": "redstone2verilog:block/gate_xor_block",
+      "y": 270
+    },
+
+    "facing=south": {
+      "model": "redstone2verilog:block/gate_xor_block",
+      "y": 180
+    },
+
+    "facing=east": {
+      "model": "redstone2verilog:block/gate_xor_block",
+      "y": 90
+    }
+  }
+}
