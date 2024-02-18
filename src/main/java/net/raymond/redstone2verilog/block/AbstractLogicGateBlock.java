@@ -1,6 +1,7 @@
 package net.raymond.redstone2verilog.block;
 
 import net.minecraft.block.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;

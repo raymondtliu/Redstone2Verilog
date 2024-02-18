@@ -147,7 +147,7 @@ public final class ExtractRedstoneCommand {
                     if (checkBlock == Blocks.REDSTONE_WIRE) {
                         RedstoneToVerilog.LOGGER.info(direction.asString());
                         tempPosList.add(new directionalBlockPos(dirpos.pos().offset(direction), direction.getOpposite()));
-                    } else if (checkBlock == VerilogRedstoneBlocks.REDSTONE_WIRE_CROSS_BLOCK) {
+                    } else if (checkBlock == VerilogRedstoneBlocks.REDSTONE_WIRE_CROSS_BLOCK || checkBlock == Blocks.REPEATER) {
                         RedstoneToVerilog.LOGGER.info(direction.asString());
                         tempPosList.add(new directionalBlockPos(dirpos.pos().offset(direction).offset(direction), direction.getOpposite()));
                     } else if (VerilogRedstoneBlocks.getGateBlocksList().contains(checkBlock) | checkBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
