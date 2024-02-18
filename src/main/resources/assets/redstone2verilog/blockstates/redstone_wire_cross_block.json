@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "redstone2verilog:block/redstone_wire_cross_block"
+    }
+  }
+}

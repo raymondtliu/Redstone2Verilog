@@ -17,7 +17,7 @@ public class VerilogRedstoneBlocks {
     public static final Block VERILOG_INPUT_BLOCK = registerBlock("verilog_input_block",
             new VerilogInputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
     public static final Block VERILOG_OUTPUT_BLOCK = registerBlock("verilog_output_block",
-            new VerilogOutputBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
+            new VerilogOutputBlock(FabricBlockSettings.copyOf(Blocks.GRASS_BLOCK)));
     public static final Block GATE_NOT_BLOCK = registerBlock("gate_not_block",
             new GateNotBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
     public static final Block GATE_AND_BLOCK = registerBlock("gate_and_block",
@@ -34,6 +34,8 @@ public class VerilogRedstoneBlocks {
             new GateXorBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
     public static final Block LATCH_D_BLOCK = registerBlock("latch_d_block",
             new LatchDBlock(FabricBlockSettings.copyOf(Blocks.COMPARATOR)));
+    public static final Block REDSTONE_WIRE_CROSS_BLOCK = registerBlock("redstone_wire_cross_block",
+            new RedstoneWireCrossBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE)));
 
 
 

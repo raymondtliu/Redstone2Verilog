@@ -33,6 +33,8 @@ public class VerilogRedstoneItemGroups {
                         entries.add(VerilogRedstoneBlocks.GATE_XOR_BLOCK);
 
                         entries.add(VerilogRedstoneBlocks.LATCH_D_BLOCK);
+
+                        entries.add(VerilogRedstoneBlocks.REDSTONE_WIRE_CROSS_BLOCK);
                     }).build());
 
 

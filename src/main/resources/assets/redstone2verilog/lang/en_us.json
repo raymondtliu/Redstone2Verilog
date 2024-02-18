@@ -13,5 +13,8 @@
 
   "block.redstone2verilog.latch_d_block": "D Latch Block",
 
+  "block.redstone2verilog.redstone_wire_cross_block": "Crossed Redstone Wire",
+
+
   "itemgroup.verilog_group": "Redstone to Verilog"
 }
