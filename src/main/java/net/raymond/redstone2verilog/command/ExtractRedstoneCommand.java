@@ -168,6 +168,22 @@ public final class ExtractRedstoneCommand {
 
         RedstoneNetlist returnNetlist = new RedstoneNetlist();
 
+        String net_name = "";
+        if (startBlock.equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK)) {
+            net_name = "in" + netlist.getInputNetSize();
+        } else {
+            for (directionalBlockPos endDirPos:endPosList) {
+                Block endingBlock = world.getBlockState(endDirPos.pos()).getBlock();
+                if (endingBlock == VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK) {
+                    net_name = "out" + netlist.getOutputNetSize();
+                    break;
+                }
+            }
+            if (net_name.isEmpty()) {
+                net_name = "net" + netlist.getNetSize();
+            }
+        }
+
         for (directionalBlockPos endDirPos:endPosList) {
             BlockPos endingPos = endDirPos.pos();
             Block endingBlock = world.getBlockState(endingPos).getBlock();
@@ -178,15 +194,6 @@ public final class ExtractRedstoneCommand {
 
             if (endingPort == "") continue;
 
-            // Create incremental net names
-            String net_name;
-            if (startBlock.equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK)) {
-                net_name = "in" + netlist.getInputNetSize();
-            } else if (endingBlock.equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
-                net_name = "out" + netlist.getOutputNetSize();
-            } else {
-                net_name = "net" + netlist.getNetSize();
-            }
             RedstoneToVerilog.LOGGER.info("netname is: " + net_name);
 
             RedstoneNet net = new RedstoneNet(net_name, startBlock, startPos, startPort, endingBlock, endDirPos, endingPort);

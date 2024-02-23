@@ -9,37 +9,25 @@ public class RedstoneNetlist {
     public List<RedstoneNet> getRedstone_netlist() {
         return redstone_netlist;
     }
+    int input_size_counter = 0;
+    int output_size_counter = 0;
+    int net_size_counter = 0;
 
     List<RedstoneNet> redstone_netlist = new ArrayList<>();
     public RedstoneNetlist() {
     }
 
     public int getInputNetSize() {
-        int size = 0;
-        for (RedstoneNet net:this.redstone_netlist) {
-            if (net.starting_block().equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK)) {
-                size++;
-            }
-        }
-        return size;
+        input_size_counter++;
+        return input_size_counter;
     }
     public int getOutputNetSize() {
-        int size = 0;
-        for (RedstoneNet net:this.redstone_netlist) {
-            if (net.finishing_block().equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
-                size++;
-            }
-        }
-        return size;
+        output_size_counter++;
+        return output_size_counter;
     }
     public int getNetSize() {
-        int size = 0;
-        for (RedstoneNet net:this.redstone_netlist) {
-            if (!net.starting_block().equals(VerilogRedstoneBlocks.VERILOG_INPUT_BLOCK) & !net.finishing_block().equals(VerilogRedstoneBlocks.VERILOG_OUTPUT_BLOCK)) {
-                size++;
-            }
-        }
-        return size;
+        net_size_counter++;
+        return net_size_counter;
     }
     public void addRedstoneNet(RedstoneNet net) {
         this.redstone_netlist.add(net);

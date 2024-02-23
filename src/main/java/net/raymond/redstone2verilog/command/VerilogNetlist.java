@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class VerilogNetlist {
@@ -30,13 +31,37 @@ public class VerilogNetlist {
     }
     public String generateVerilog() {
         String header = buildInputOutputSignals();
+        String wires = buildWires();
         String logic = buildLogic();
         checkedPos.clear();
 
 
         return header +
+                wires +
                 logic +
                 "endmodule";
+    }
+
+    private String buildWires() {
+        StringBuilder wireString = new StringBuilder();
+
+        List<Integer> foundNets = new ArrayList<>();
+
+        for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
+            if (net.net_name().contains("net")) {
+                foundNets.add(Integer.parseInt(net.net_name().substring(3)));
+            }
+        }
+
+        for (int i = 1; i <= Collections.max(foundNets); i++) {
+            wireString.append("\twire net")
+                    .append(i)
+                    .append(";\n");
+        }
+
+        wireString.append("\n");
+
+        return wireString.toString();
     }
 
     private String buildLogic() {
