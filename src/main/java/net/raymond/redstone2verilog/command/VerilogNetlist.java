@@ -1,5 +1,7 @@
 package net.raymond.redstone2verilog.command;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
@@ -25,6 +27,8 @@ public class VerilogNetlist {
             FileWriter filewriter = new FileWriter(outputVerilogFile);
             filewriter.write(generateVerilog());
             filewriter.close();
+
+            MinecraftClient.getInstance().player.sendMessage(Text.literal("Successfully saved generated Verilog to " + outputVerilogFile));
         } catch (IOException e) {
             e.printStackTrace();
         }
