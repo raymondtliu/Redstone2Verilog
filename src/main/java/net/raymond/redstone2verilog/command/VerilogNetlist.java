@@ -1,16 +1,24 @@
 package net.raymond.redstone2verilog.command;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class VerilogNetlist {
@@ -23,12 +31,25 @@ public class VerilogNetlist {
 
     public void exportVerilogCode() {
         try {
-            File outputVerilogFile = new File("D:/onedrive/University of Warwick/Wachter, Eduardo - Raymond/code/generated_verilog.v");
+            //Get date for file name
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("_yyMMdd_HHmmss");
+
+            // Generate file path
+            String runDir = System.getProperty("user.dir");
+            Path filePath = Paths.get(runDir, "exported_verilog", "generated_module" + dateFormatter.format(new Date()));
+
+            // Create parent folder, no exception is thrown if it already exists
+            File parentFolder = new File(filePath.getParent().toString());
+            parentFolder.mkdirs();
+
+            File outputVerilogFile = new File(filePath.toString());
             FileWriter filewriter = new FileWriter(outputVerilogFile);
             filewriter.write(generateVerilog());
             filewriter.close();
 
             MinecraftClient.getInstance().player.sendMessage(Text.literal("Successfully saved generated Verilog to " + outputVerilogFile));
+
+            Util.getOperatingSystem().open(filePath.toUri());
         } catch (IOException e) {
             e.printStackTrace();
         }
