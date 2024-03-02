@@ -39,7 +39,7 @@ public final class VerilogInputBlock extends RedstoneBlock {
     }
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        world.setBlockState(pos, (BlockState) state.cycle(POWERED));
+        world.setBlockState(pos, state.cycle(POWERED));
         return ActionResult.SUCCESS;
     }
 }

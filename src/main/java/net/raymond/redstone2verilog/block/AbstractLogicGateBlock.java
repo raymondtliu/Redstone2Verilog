@@ -1,9 +1,7 @@
 package net.raymond.redstone2verilog.block;
 
 import net.minecraft.block.*;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -14,8 +12,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
-import java.util.Objects;
-
 public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
     public static final BooleanProperty POWERED = Properties.POWERED;
     public abstract int gateLogic(World world, BlockPos pos, BlockState state);
@@ -25,21 +21,10 @@ public abstract class AbstractLogicGateBlock extends AbstractRedstoneGateBlock {
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
     }
 
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack);
-        RedstoneToVerilog.LOGGER.info("Placed block: " + state.getBlock().getName().getString());
-    }
-
     // States this block can emit power
     @Override
     public boolean emitsRedstonePower(BlockState state) {
         return true;
-    }
-
-    @Override
-    protected boolean hasPower(World world, BlockPos pos, BlockState state) {
-        return super.hasPower(world, pos, state);
     }
 
     @Override

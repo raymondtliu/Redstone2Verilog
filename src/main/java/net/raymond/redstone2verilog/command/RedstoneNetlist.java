@@ -1,7 +1,5 @@
 package net.raymond.redstone2verilog.command;
 
-import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
-
 import java.util.ArrayList;
 import java.util.List;
 
