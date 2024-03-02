@@ -11,10 +11,7 @@ import net.minecraft.util.Identifier;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 
 public class VerilogRedstoneItems {
-    public static final Item EXPORT_TOOL = registerItem("export_tool", new Item(new FabricItemSettings()));
-
     private static void addItemsToIngredientToItemGroup(FabricItemGroupEntries entries) {
-        entries.add(EXPORT_TOOL);
     }
 
     private static Item registerItem(String name, Item item) {

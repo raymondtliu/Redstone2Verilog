@@ -36,7 +36,7 @@ public class VerilogNetlist {
 
             // Generate file path
             String runDir = System.getProperty("user.dir");
-            Path filePath = Paths.get(runDir, "exported_verilog", "generated_module" + dateFormatter.format(new Date()));
+            Path filePath = Paths.get(runDir, "exported_verilog", "generated_module" + dateFormatter.format(new Date()) + ".v");
 
             // Create parent folder, no exception is thrown if it already exists
             File parentFolder = new File(filePath.getParent().toString());
