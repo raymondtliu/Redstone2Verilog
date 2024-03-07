@@ -41,7 +41,7 @@ public class RedstoneWireCrossBlock extends AbstractLogicGateBlock {
     @Override
     public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
         World world1 = MinecraftClient.getInstance().world;
-        world1.scheduleBlockTick(pos, this, 10);
+        world1.scheduleBlockTick(pos, this, 1);
 
         if (direction == state.get(FACING)) {
             return getDirectionalPower(world1, pos, state.get(FACING));

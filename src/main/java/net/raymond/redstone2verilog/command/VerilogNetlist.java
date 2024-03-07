@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -37,12 +38,27 @@ public class VerilogNetlist {
             // Generate file path
             String runDir = System.getProperty("user.dir");
             Path filePath = Paths.get(runDir, "exported_verilog", "generated_module" + dateFormatter.format(new Date()) + ".v");
+            Path dlatchPath = Paths.get(runDir, "exported_verilog", "d_latch.v");
 
             // Create parent folder, no exception is thrown if it already exists
             File parentFolder = new File(filePath.getParent().toString());
             parentFolder.mkdirs();
 
             File outputVerilogFile = new File(filePath.toString());
+            File dlatchFile = new File(dlatchPath.toString());
+
+            if (!dlatchFile.exists()) {
+                try {
+                    FileWriter dlatchFileWriter = new FileWriter(dlatchFile);
+                    dlatchFileWriter.write(getDlatchString());
+                    dlatchFileWriter.close();
+                    System.out.println("File created successfully!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
             FileWriter filewriter = new FileWriter(outputVerilogFile);
             filewriter.write(generateVerilog());
             filewriter.close();
@@ -53,6 +69,23 @@ public class VerilogNetlist {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getDlatchString() {
+        return "// D latch (gate model)\n" +
+                "module d_latch(\n" +
+                "  input d, e,\n" +
+                "  output q);\n" +
+                "\n" +
+                "  wire s, r, nd, nq;\n" +
+                "\n" +
+                "  nor g1(q, r, nq);\n" +
+                "  nor g2(nq, s, q);\n" +
+                "  and g3(r, e, nd);\n" +
+                "  and g4(s, e, d);\n" +
+                "  not g5(nd, d);\n" +
+                "\n" +
+                "endmodule";
     }
     public String generateVerilog() {
         String header = buildInputOutputSignals();
