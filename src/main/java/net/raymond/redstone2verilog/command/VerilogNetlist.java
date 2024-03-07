@@ -93,7 +93,6 @@ public class VerilogNetlist {
         String logic = buildLogic();
         checkedPos.clear();
 
-
         return header +
                 wires +
                 logic +
