@@ -60,6 +60,7 @@ public class VerilogNetlist {
 
 
             FileWriter filewriter = new FileWriter(outputVerilogFile);
+            RedstoneToVerilog.LOGGER.info("Generating Verilog...");
             filewriter.write(generateVerilog());
             filewriter.close();
 
@@ -110,6 +111,11 @@ public class VerilogNetlist {
             }
         }
 
+        // Returns empty string if there are no intermediate wires
+        if (foundNets.isEmpty()) {
+            return "";
+        }
+
         for (int i = 1; i <= Collections.max(foundNets); i++) {
             wireString.append("\twire net")
                     .append(i)
@@ -117,6 +123,8 @@ public class VerilogNetlist {
         }
 
         wireString.append("\n");
+
+        RedstoneToVerilog.LOGGER.info("Generated wire declarations: " + wireString);
 
         return wireString.toString();
     }
@@ -170,7 +178,8 @@ public class VerilogNetlist {
                 block_clocks.clear();
             }
 
-        RedstoneToVerilog.LOGGER.info("logic string is: " + logicString.toString());
+        RedstoneToVerilog.LOGGER.info("Generated logic string: " + logicString);
+
         return logicString.toString();
     }
 
@@ -197,8 +206,13 @@ public class VerilogNetlist {
                 continue;
             }
 
-            RedstoneToVerilog.LOGGER.info("checking pos " + net.endPos().pos() + " against " + checkedNet.endPos().pos());
+            // skips nets that end in clk, this d latch will be covered by the net that has input as endport
+            if (net.endPort() == "clk") {
+                continue;
+            }
+
             if (net.endPos().pos().equals(checkedNet.endPos().pos())) {
+                RedstoneToVerilog.LOGGER.info("found connected block!");
                 tempCheckedPos.add(net.endPos().pos());
                 if (checkedNet.endPort() == "in" | checkedNet.endPort() == "i1" | checkedNet.endPort() == "i2" | checkedNet.endPort() == "d") {
                     input_nets.add(checkedNet);
@@ -246,6 +260,8 @@ public class VerilogNetlist {
 
         header.delete(header.length() - 2, header.length());
         header.append(");\n\n");
+
+        RedstoneToVerilog.LOGGER.info("Generated header text: " + header);
 
         return header.toString();
     }
