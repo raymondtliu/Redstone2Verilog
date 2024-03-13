@@ -70,6 +70,10 @@ public class VerilogRedstoneBlocks {
         return List.of(
                 VerilogRedstoneBlocks.LATCH_D_BLOCK);
     }
+
+    /**
+     * @return all blocks in Verilog Blocks
+     */
     public static List<Block> getVerilogBlocksList() {
         List<Block> returnList = new ArrayList<>();
         returnList.addAll(getOneInputGateBlocksList());

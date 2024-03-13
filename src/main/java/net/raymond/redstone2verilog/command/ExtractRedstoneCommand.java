@@ -10,7 +10,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -52,6 +51,10 @@ public final class ExtractRedstoneCommand {
         return 0;
     }
 
+    /**
+     * searches the vicinity of the player for input blocks, then adds them all to a queue to be searched using a Breadth-First Search
+     * @return extracted netlist of the world
+     */
     private static RedstoneNetlist extractRedstoneNetlist(World world) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         RedstoneNetlist extracted_netlist = new RedstoneNetlist();
@@ -77,7 +80,6 @@ public final class ExtractRedstoneCommand {
     }
 
     /**
-     * @param foundBlocks
      * Uses a temporary netlist to be manipulated during the for loop, once the for loop is finished, all the contents are then shifted to the found blocks list
      */
     private static void breadthFirstSearch(World world, List<InputVerilogPort> input_blocks, RedstoneNetlist tempNetlist, List<BlockPos> checkedPos, RedstoneNetlist extracted_netlist, RedstoneNetlist foundBlocks) {
@@ -117,6 +119,9 @@ public final class ExtractRedstoneCommand {
         }
     }
 
+    /**
+     * looks at all the positions surrounding the player for Verilog Input Blocks
+     */
     private static void searchInputBlocks(World world, int player_xpos, int search_range, int player_ypos, int player_zpos, List<InputVerilogPort> input_blocks) {
         // loop through nearby coordinates and add any input blocks to a list
         for (int x = player_xpos - search_range; x < player_xpos + search_range; x++) {
@@ -132,7 +137,8 @@ public final class ExtractRedstoneCommand {
     }
 
     /**
-
+     * Creates a queue for the start block, and then searches until it finds all the connected blocks to the starting block's output
+     * @return RedstoneNetlist of all the connected nets to the starting block's output
      */
     private static RedstoneNetlist findConnectedRedstoneNets(World world, Block startBlock, List<BlockPos> posList, directionalBlockPos startPos, RedstoneNetlist netlist) {
         Block block = world.getBlockState(startPos.pos()).getBlock();
@@ -141,7 +147,7 @@ public final class ExtractRedstoneCommand {
         List<directionalBlockPos> endPosList = new ArrayList<>();
         Direction[] directionList = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-        RedstoneToVerilog.LOGGER.info("start block: " + startBlock.toString() + ", and directional block pos: " + startPos.toString() + ", redstone netlist: " + netlist);
+        RedstoneToVerilog.LOGGER.info("start block: " + startBlock.toString() + ", and directional block pos: " + startPos + ", redstone netlist: " + netlist);
 
         // guard clause to check if coordinates lead to same block as starting block
         if (block != startBlock) {
@@ -168,6 +174,9 @@ public final class ExtractRedstoneCommand {
         return returnNetlist;
     }
 
+    /**
+     * takes a list of positions and creates a net for each with the same provided start block
+     */
     private static void addNetsToNetlist(World world, Block startBlock, directionalBlockPos startPos, RedstoneNetlist netlist, List<directionalBlockPos> endPosList, String net_name, String startPort, RedstoneNetlist returnNetlist) {
         // find the ports for all the ending blocks as nets to the netlist
         for (directionalBlockPos endDirPos: endPosList) {
@@ -184,6 +193,10 @@ public final class ExtractRedstoneCommand {
         }
     }
 
+    /**
+     * generates a net name depending on the start block or end block, with an incrementing number at the end
+     * @return generated net name
+     */
     @NotNull
     private static String generateNetName(World world, Block startBlock, RedstoneNetlist netlist, List<directionalBlockPos> endPosList) {
         String net_name = "";
@@ -205,7 +218,7 @@ public final class ExtractRedstoneCommand {
     }
 
     /**
-     * method to iterate search over the entire redstone net, similar to a maze solving algorithm
+     * method to iterate search over the entire redstone net, similar to a maze solving algorithm that uses Breadth-First Search
      */
     private static void iterativeRedstoneNetSearch(World world, Block startBlock, directionalBlockPos startPos, List<directionalBlockPos> currentPosList, Direction[] directionList, List<directionalBlockPos> tempPosList, List<directionalBlockPos> endPosList) {
         // continues searching if there are still positions in the currentPosList
@@ -256,6 +269,9 @@ public final class ExtractRedstoneCommand {
         }
     }
 
+    /**
+     * Returns a port name of the given block and the direction looking at the block
+     */
     @Nullable
     private static String getPortName(World world, Block facingBlock, BlockPos currentPos, Direction facingDirection) {
         //Check if block is not a verilog block

@@ -37,6 +37,10 @@ public final class VerilogInputBlock extends RedstoneBlock {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(POWERED);
     }
+
+    /**
+     * onUse toggle output power, similar to a T Flip-flop
+     */
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         world.setBlockState(pos, state.cycle(POWERED));

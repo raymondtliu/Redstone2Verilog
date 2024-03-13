@@ -1,19 +1,15 @@
 package net.raymond.redstone2verilog.command;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.raymond.redstone2verilog.RedstoneToVerilog;
 import net.raymond.redstone2verilog.block.VerilogRedstoneBlocks;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -30,6 +26,9 @@ public class VerilogNetlist {
         this.redstone_netlist = redstone_netlist;
     }
 
+    /**
+     * main function for writing the Verilog code from the Verilog netlist
+     */
     public void exportVerilogCode() {
         try {
             //Get date for file name
@@ -47,6 +46,7 @@ public class VerilogNetlist {
             File outputVerilogFile = new File(filePath.toString());
             File dlatchFile = new File(dlatchPath.toString());
 
+            // write dlatch file
             if (!dlatchFile.exists()) {
                 try {
                     FileWriter dlatchFileWriter = new FileWriter(dlatchFile);
@@ -58,7 +58,7 @@ public class VerilogNetlist {
                 }
             }
 
-
+            // write to file
             FileWriter filewriter = new FileWriter(outputVerilogFile);
             RedstoneToVerilog.LOGGER.info("Generating Verilog...");
             filewriter.write(generateVerilog());
@@ -72,22 +72,31 @@ public class VerilogNetlist {
         }
     }
 
+    /**
+     * @return string containing Verilog module for D-Latch
+     */
     public String getDlatchString() {
-        return "// D latch (gate model)\n" +
-                "module d_latch(\n" +
-                "  input d, e,\n" +
-                "  output q);\n" +
-                "\n" +
-                "  wire s, r, nd, nq;\n" +
-                "\n" +
-                "  nor g1(q, r, nq);\n" +
-                "  nor g2(nq, s, q);\n" +
-                "  and g3(r, e, nd);\n" +
-                "  and g4(s, e, d);\n" +
-                "  not g5(nd, d);\n" +
-                "\n" +
-                "endmodule";
+        return """
+                // D latch (gate model)
+                module d_latch(
+                  input d, e,
+                  output q);
+
+                  wire s, r, nd, nq;
+
+                  nor g1(q, r, nq);
+                  nor g2(nq, s, q);
+                  and g3(r, e, nd);
+                  and g4(s, e, d);
+                  not g5(nd, d);
+
+                endmodule""";
     }
+
+    /**
+     * calls on different functions to generate the Verilog from object's netlist
+     * @return full generated Verilog string
+     */
     public String generateVerilog() {
         String header = buildInputOutputSignals();
         String wires = buildWires();
@@ -100,11 +109,15 @@ public class VerilogNetlist {
                 "endmodule";
     }
 
+    /**
+     * Checks for maximum number for wires and declares a wire until the number equals the max
+     */
     private String buildWires() {
         StringBuilder wireString = new StringBuilder();
 
         List<Integer> foundNets = new ArrayList<>();
 
+        // reads every net to find names with "net" and retrieve the number at the end
         for (RedstoneNet net:this.redstone_netlist.getRedstone_netlist()) {
             if (net.net_name().contains("net")) {
                 foundNets.add(Integer.parseInt(net.net_name().substring(3)));
@@ -129,6 +142,9 @@ public class VerilogNetlist {
         return wireString.toString();
     }
 
+    /**
+     * build the logic of the object's netlist by looking at one net, then comparing to all the others to find any connections, making sure to skip any checked locations
+     */
     private String buildLogic() {
         StringBuilder logicString = new StringBuilder();
         List<RedstoneNet> block_inputs = new ArrayList<>();
@@ -235,6 +251,9 @@ public class VerilogNetlist {
         RedstoneToVerilog.LOGGER.info("Looking for connected net of: " + net + " and found input net: " + input_nets + " and found output net: " + output_nets + " and found clk net: " + clk_nets);
     }
 
+    /**
+     * Builds input and output signals by looking through the netlist and building a port for any net names that have "input" and "output" in them
+     */
     private String buildInputOutputSignals() {
         StringBuilder header = new StringBuilder();
         String module_name = "generated_module";
