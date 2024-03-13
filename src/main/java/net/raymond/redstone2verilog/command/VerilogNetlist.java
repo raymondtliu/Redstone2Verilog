@@ -159,40 +159,61 @@ public class VerilogNetlist {
                 continue;
             }
 
+            boolean isGate = VerilogRedstoneBlocks.getOneInputGateBlocksList().contains(net.finishing_block()) || VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(net.finishing_block());
+
             gate_counter++;
 
             logicString.append("\t")
                     .append(net.finishing_block().toString())
                     .append(" g")
                     .append(gate_counter)
-                    .append(" (.")
-                    .append(block_outputs.get(0).startPort())
-                    .append("(")
-                    .append(block_outputs.get(0).net_name())
-                    .append("), ");
+                    .append(" (");
+
+            if (!isGate) {
+                logicString.append(".")
+                        .append(block_outputs.get(0).startPort())
+                        .append("(");
+            }
+
+            logicString.append(block_outputs.get(0).net_name());
+
+            if (!isGate) {
+                logicString.append(")");
+            }
+
+            logicString.append(", ");
 
             if (VerilogRedstoneBlocks.getTwoInputGateBlocksList().contains(net.finishing_block())) {
-                logicString.append(".")
-                        .append(block_inputs.get(0).endPort())
-                        .append("(")
-                        .append(block_inputs.get(0).net_name())
-                        .append("), ");
+//                logicString.append(".")
+//                        .append(block_inputs.get(0).endPort())
+//                        .append("(")
+                logicString.append(block_inputs.get(0).net_name())
+                        .append(", ");
             }
             if (VerilogRedstoneBlocks.getLatchBlocksList().contains(net.finishing_block())) {
                 logicString.append(".e(")
                         .append(block_clocks.get(0).net_name())
                         .append("), ");
             }
-            logicString.append(".")
-                    .append(net.endPort())
-                    .append("(")
-                    .append(net.net_name())
-                    .append("));\n");
 
-                block_inputs.clear();
-                block_outputs.clear();
-                block_clocks.clear();
+            if (!isGate) {
+                logicString.append(".")
+                        .append(net.endPort())
+                        .append("(");
             }
+
+            logicString.append(net.net_name());
+
+            if (!isGate) {
+                logicString.append(")");
+            }
+
+            logicString.append(");\n");
+
+            block_inputs.clear();
+            block_outputs.clear();
+            block_clocks.clear();
+        }
 
         RedstoneToVerilog.LOGGER.info("Generated logic string: " + logicString);
 
